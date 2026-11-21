@@ -1,0 +1,143 @@
+/* Ferro — generated from tokens.json */
+:root, [data-theme="dark"] {
+  --bg: #0e0f11; /* Fondo de pantalla. Todo el texto de ink, ink-muted e ink-subtle cumple 4.5:1 sobre él. */
+  --surface: #17181b; /* Tarjetas de ejercicio, filas, listas y hojas inferiores. */
+  --surface-raised: #212328; /* Lo que va encima de surface: campos numéricos, barra de descanso, menús. En claro se separa con shadow-sm. */
+  --line: #2d3036; /* Divisores y bordes decorativos. Nunca como único borde de un control. */
+  --line-strong: #6a6f78; /* Borde de controles (campos, botón secundario, casilla sin marcar): 3:1 sobre surface y surface-raised en ambos temas. */
+  --ink: #f3f1ed; /* Texto principal, pesos y reps. Sobre bg, surface, surface-raised y brasa-soft. */
+  --ink-muted: #a8acb3; /* Texto secundario: cabeceras de tabla, columna Anterior, metadatos. 4.5:1 o más en todas las superficies. */
+  --ink-subtle: #8a8f98; /* Placeholders y valores objetivo de la rutina. 4.5:1 sobre bg y surface; en oscuro 4.8:1 sobre surface-raised. */
+  --brasa: #ff6b1f; /* El color de Ferro. Relleno del botón primario, casilla de serie hecha, progreso del descanso. Una acción primaria por pantalla. Texto encima: on-brasa. */
+  --brasa-pressed: #e85a12; /* Estado pulsado de lo que usa brasa. on-brasa encima sigue en 4.6:1 o más. */
+  --on-brasa: #170a02; /* Texto e iconos sobre brasa y brasa-pressed (5.5:1). Nunca blanco sobre brasa. */
+  --brasa-text: var(--brasa); /* Texto e iconos naranjas sobre bg, surface y brasa-soft: enlaces, récords, botón fantasma. En claro es más oscuro que brasa para llegar a 4.5:1. */
+  --brasa-soft: #3a1e10; /* Fondo de la fila de serie completada, del aviso de récord y del chip seleccionado. Texto encima: ink o brasa-text. */
+  --iron: #1c1e22; /* La placa del símbolo y el fondo del icono de app. Igual en los dos temas. Solo para la marca, no para UI. */
+  --success: #3dd68c; /* Confirmaciones (copia exportada, guardado). Texto sobre bg y surface. */
+  --warning: #f2b53a; /* Avisos no bloqueantes (copia de seguridad antigua, series sin marcar). */
+  --danger: #ff8f99; /* Errores y acciones destructivas. Siempre con icono o texto: en oscuro es más claro que brasa, pero su tono es cercano. */
+  --set-warmup: #6ea8ff; /* Letra W de serie de calentamiento. Azul frío frente al naranja: el metal aún no está caliente. */
+  --set-failure: var(--danger); /* Letra F de serie al fallo. */
+  --set-drop: #b794f6; /* Letra D de drop set. */
+  --focus: var(--brasa); /* Anillo de foco de teclado y de lector de pantalla: 2px, separado 2px del control. */
+  --shadow-sm: none; /* Tarjetas en claro. En oscuro la elevación la marca el escalón de superficie. */
+  --shadow-lg: 0 -8px 24px rgba(0, 0, 0, 0.5); /* Hojas inferiores y barra de descanso. */
+}
+[data-theme="light"] {
+  --bg: #f4f3f0;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --line: #e2e0db;
+  --line-strong: #8c8881;
+  --ink: #141518;
+  --ink-muted: #50545b;
+  --ink-subtle: #6a6e76;
+  --brasa: #ea580c;
+  --brasa-pressed: #d94f0a;
+  --on-brasa: #170a02;
+  --brasa-text: #b8440a;
+  --brasa-soft: #fde6d6;
+  --iron: #1c1e22;
+  --success: #15803d;
+  --warning: #9a5b06;
+  --danger: #c81e3a;
+  --set-warmup: #2058d8;
+  --set-failure: var(--danger);
+  --set-drop: #7a3be0;
+  --focus: var(--brasa-text);
+  --shadow-sm: 0 1px 2px rgba(20, 21, 24, 0.08), 0 0 0 1px rgba(20, 21, 24, 0.04);
+  --shadow-lg: 0 -8px 24px rgba(20, 21, 24, 0.12);
+}
+:root {
+  --space-1: 4px; /* Hueco entre icono y texto. */
+  --space-2: 8px; /* Hueco entre columnas de la tabla de series y entre chips. */
+  --space-3: 12px; /* Relleno interno de campos y tarjetas compactas. */
+  --space-4: 16px; /* Margen lateral de pantalla y relleno de tarjetas. */
+  --space-5: 24px; /* Separación entre tarjetas de ejercicio. */
+  --space-6: 32px; /* Separación entre secciones. */
+  --space-7: 48px; /* Aire alrededor de estados vacíos y del resumen. */
+  --radius-sm: 4px; /* Insignias de tipo de serie, chips, casilla de serie. */
+  --radius-md: 8px; /* Botones y campos. */
+  --radius-lg: 12px; /* Tarjetas y hojas inferiores. No hay pastillas ni círculos en la UI salvo avatares. */
+  --touch-min: 48px; /* Objetivo táctil mínimo de cualquier control (48 dp, la recomendación de Android). */
+  --row-height: 52px; /* Alto de fila de serie y de elementos de lista. */
+  --button-height: 48px; /* Botón estándar. */
+  --icon-sm: 16px; /* Icono dentro de texto o insignias. */
+  --icon-md: 20px; /* Iconos de fila y botones. */
+  --icon-lg: 24px; /* Barra de pestañas y cabeceras. */
+  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-sans: Barlow, system-ui, sans-serif;
+  --text-display: 700 40px/40px var(--font-display); /* Título grande de pantalla y resumen de entreno, en mayúsculas. */
+  --text-title: 700 28px/32px var(--font-display); /* Cabecera de pantalla y nombre de rutina. */
+  --text-number-xl: 600 48px/48px var(--font-display); /* Temporizador de descanso, totales del resumen. Cifras tabulares. */
+  --text-number: 600 20px/24px var(--font-display); /* Peso y reps en la tabla de series. Cifras tabulares. */
+  --text-heading: 600 18px/24px var(--font-sans); /* Nombre de ejercicio en la tarjeta, títulos de sección. */
+  --text-body: 400 16px/24px var(--font-sans); /* Texto corrido, notas, instrucciones. */
+  --text-body-strong: 600 16px/24px var(--font-sans); /* Botones y elementos de lista. */
+  --text-caption: 400 14px/20px var(--font-sans); /* Metadatos, ayudas bajo campos. */
+  --text-label: 600 12px/16px var(--font-sans); /* Cabeceras de tabla y etiquetas, en mayúsculas, en ink-muted. */
+}
+.display {
+  font-family: var(--font-display);
+  font-size: 40px;
+  line-height: 40px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+.title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 32px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.number-xl {
+  font-family: var(--font-display);
+  font-size: 48px;
+  line-height: 48px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.number {
+  font-family: var(--font-display);
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.heading {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.body {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.body-strong {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.caption {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.label {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}

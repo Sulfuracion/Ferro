@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Solo para recursos XML (ventana e icono). En Compose los colores salen de FerroTheme. -->
+    <color name="ferro_window_background">#F4F3F0</color>
+    <color name="ferro_splash_background">#0E0F11</color>
+    <color name="ferro_iron">#1C1E22</color>
+    <color name="ferro_ink_on_iron">#F3F1ED</color>
+    <color name="ferro_brasa">#FF6B1F</color>
+</resources>

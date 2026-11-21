@@ -1,0 +1,934 @@
+[
+  {
+    "id": "template-full-body-3",
+    "nameEs": "Full Body 3 días",
+    "nameEn": "Full Body 3-Day",
+    "descriptionEs": "Tres sesiones de cuerpo completo alternando básicos pesados y accesorios.",
+    "descriptionEn": "Three full-body sessions alternating heavy compound lifts and accessories.",
+    "routines": [
+      {
+        "id": "template-fb-a",
+        "nameEs": "Full Body A",
+        "nameEn": "Full Body A",
+        "notesEs": "Énfasis en sentadilla y empuje horizontal.",
+        "notesEn": "Focus on squat and horizontal push.",
+        "exercises": [
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000064",
+            "restSeconds": 150,
+            "notesEs": "Controla la bajada y rompe el paralelo.",
+            "notesEn": "Control the descent and break parallel.",
+            "sets": [
+              { "setType": "WARMUP", "targetRepsMin": 8, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000001",
+            "restSeconds": 150,
+            "notesEs": "Omóplatos retraídos y pausa breve en el pecho.",
+            "notesEn": "Retract shoulder blades and pause briefly on the chest.",
+            "sets": [
+              { "setType": "WARMUP", "targetRepsMin": 8, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000019",
+            "restSeconds": 120,
+            "notesEs": "Torso firme a 45 grados.",
+            "notesEn": "Brace torso at 45 degrees.",
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000032",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000101",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetDurationS": 45 },
+              { "setType": "NORMAL", "targetDurationS": 45 },
+              { "setType": "NORMAL", "targetDurationS": 45 }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "template-fb-b",
+        "nameEs": "Full Body B",
+        "nameEn": "Full Body B",
+        "notesEs": "Énfasis en cadena posterior y empuje vertical.",
+        "notesEn": "Focus on posterior chain and overhead press.",
+        "exercises": [
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000075",
+            "restSeconds": 150,
+            "sets": [
+              { "setType": "WARMUP", "targetRepsMin": 8, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000028",
+            "restSeconds": 150,
+            "sets": [
+              { "setType": "WARMUP", "targetRepsMin": 8, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000017",
+            "restSeconds": 120,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 12 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000069",
+            "restSeconds": 120,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000043",
+            "supersetGroup": "A",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000056",
+            "supersetGroup": "A",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "template-fb-c",
+        "nameEs": "Full Body C",
+        "nameEn": "Full Body C",
+        "notesEs": "Variantes unilaterales, tracción vertical y glúteo.",
+        "notesEn": "Front squat, incline press, pull-ups and glutes.",
+        "exercises": [
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000065",
+            "restSeconds": 150,
+            "sets": [
+              { "setType": "WARMUP", "targetRepsMin": 8, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000005",
+            "restSeconds": 120,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 12 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000013",
+            "restSeconds": 120,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 10 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000083",
+            "restSeconds": 120,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000039",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "template-upper-lower-4",
+    "nameEs": "Torso/Pierna 4 días",
+    "nameEn": "Upper/Lower 4-Day",
+    "descriptionEs": "Frecuencia 2 equilibrando fuerza e hipertrofia en cuatro sesiones semanales.",
+    "descriptionEn": "Twice-weekly frequency balancing strength and hypertrophy across four days.",
+    "routines": [
+      {
+        "id": "template-ul-upper-a",
+        "nameEs": "Torso A",
+        "nameEn": "Upper A",
+        "notesEs": "Empuje y tirón horizontal pesados.",
+        "notesEn": "Heavy horizontal push and pull.",
+        "exercises": [
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000001",
+            "restSeconds": 150,
+            "sets": [
+              { "setType": "WARMUP", "targetRepsMin": 8, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000019",
+            "restSeconds": 150,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000029",
+            "restSeconds": 120,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000017",
+            "restSeconds": 90,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000042",
+            "supersetGroup": "A",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000056",
+            "supersetGroup": "A",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "template-ul-lower-a",
+        "nameEs": "Pierna A",
+        "nameEn": "Lower A",
+        "notesEs": "Dominante de rodilla e isquios.",
+        "notesEn": "Quad-focused lower body and hamstrings.",
+        "exercises": [
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000064",
+            "restSeconds": 180,
+            "sets": [
+              { "setType": "WARMUP", "targetRepsMin": 8, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000075",
+            "restSeconds": 150,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000069",
+            "restSeconds": 120,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000078",
+            "restSeconds": 90,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000092",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "template-ul-upper-b",
+        "nameEs": "Torso B",
+        "nameEn": "Upper B",
+        "notesEs": "Empuje vertical y tracción vertical.",
+        "notesEn": "Overhead press and vertical pulling.",
+        "exercises": [
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000028",
+            "restSeconds": 150,
+            "sets": [
+              { "setType": "WARMUP", "targetRepsMin": 8, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000013",
+            "restSeconds": 120,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 10 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000005",
+            "restSeconds": 120,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 12 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000022",
+            "restSeconds": 90,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000032",
+            "supersetGroup": "A",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000039",
+            "supersetGroup": "A",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "template-ul-lower-b",
+        "nameEs": "Pierna B",
+        "nameEn": "Lower B",
+        "notesEs": "Dominante de cadera, unilateral y glúteo.",
+        "notesEn": "Hip-dominant lower body, unilateral work and glutes.",
+        "exercises": [
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000105",
+            "restSeconds": 180,
+            "sets": [
+              { "setType": "WARMUP", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000067",
+            "restSeconds": 120,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000083",
+            "restSeconds": 120,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 12 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000071",
+            "supersetGroup": "A",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000079",
+            "supersetGroup": "A",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000093",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "template-ppl-6",
+    "nameEs": "Push/Pull/Legs 6 días",
+    "nameEn": "Push/Pull/Legs 6-Day",
+    "descriptionEs": "División clásica de empuje, tirón y pierna en dos rotaciones completas.",
+    "descriptionEn": "Classic push, pull and legs split across two full weekly rotations.",
+    "routines": [
+      {
+        "id": "template-ppl-push-a",
+        "nameEs": "Push A",
+        "nameEn": "Push A",
+        "notesEs": "Pecho, hombro y tríceps con base en press banca.",
+        "notesEn": "Chest, shoulders and triceps anchored by bench press.",
+        "exercises": [
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000001",
+            "restSeconds": 150,
+            "sets": [
+              { "setType": "WARMUP", "targetRepsMin": 8, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000029",
+            "restSeconds": 120,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000005",
+            "restSeconds": 90,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000032",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000056",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "template-ppl-pull-a",
+        "nameEs": "Pull A",
+        "nameEn": "Pull A",
+        "notesEs": "Espalda, deltoides posterior y bíceps con remo pesado.",
+        "notesEn": "Back, rear delts and biceps led by barbell rows.",
+        "exercises": [
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000019",
+            "restSeconds": 150,
+            "sets": [
+              { "setType": "WARMUP", "targetRepsMin": 8, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000017",
+            "restSeconds": 120,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 12 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000022",
+            "restSeconds": 90,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000039",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000043",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "template-ppl-legs-a",
+        "nameEs": "Legs A",
+        "nameEn": "Legs A",
+        "notesEs": "Sentadilla trasera, peso muerto rumano y gemelos.",
+        "notesEn": "Back squat, Romanian deadlift and calves.",
+        "exercises": [
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000064",
+            "restSeconds": 180,
+            "sets": [
+              { "setType": "WARMUP", "targetRepsMin": 8, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000075",
+            "restSeconds": 150,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000069",
+            "restSeconds": 120,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000078",
+            "restSeconds": 90,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000092",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "template-ppl-push-b",
+        "nameEs": "Push B",
+        "nameEn": "Push B",
+        "notesEs": "Press militar con barra, pectoral con mancuernas y tríceps.",
+        "notesEn": "Overhead press, dumbbell chest work and triceps.",
+        "exercises": [
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000028",
+            "restSeconds": 150,
+            "sets": [
+              { "setType": "WARMUP", "targetRepsMin": 8, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000004",
+            "restSeconds": 120,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000007",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000032",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000054",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "template-ppl-pull-b",
+        "nameEs": "Pull B",
+        "nameEn": "Pull B",
+        "notesEs": "Dominadas, remo unilateral y superserie de bíceps.",
+        "notesEn": "Pull-ups, single-arm row and biceps superset.",
+        "exercises": [
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000013",
+            "restSeconds": 120,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 10 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000021",
+            "restSeconds": 90,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 10 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000017",
+            "restSeconds": 90,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000039",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000045",
+            "supersetGroup": "A",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000046",
+            "supersetGroup": "A",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "template-ppl-legs-b",
+        "nameEs": "Legs B",
+        "nameEn": "Legs B",
+        "notesEs": "Sentadilla frontal, hip thrust y trabajo unilateral.",
+        "notesEn": "Front squat, hip thrust and unilateral leg work.",
+        "exercises": [
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000065",
+            "restSeconds": 150,
+            "sets": [
+              { "setType": "WARMUP", "targetRepsMin": 8, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 },
+              { "setType": "NORMAL", "targetRepsMin": 6, "targetRepsMax": 8 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000083",
+            "restSeconds": 120,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 8, "targetRepsMax": 12 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000067",
+            "restSeconds": 120,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 },
+              { "setType": "NORMAL", "targetRepsMin": 10, "targetRepsMax": 12 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000071",
+            "supersetGroup": "A",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000079",
+            "supersetGroup": "A",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000093",
+            "restSeconds": 60,
+            "sets": [
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 },
+              { "setType": "NORMAL", "targetRepsMin": 12, "targetRepsMax": 15 }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "template-strength-5x5",
+    "nameEs": "Fuerza 5x5",
+    "nameEn": "Strength 5x5",
+    "descriptionEs": "Progresión lineal clásica de fuerza con básicos de barra a 5 series de 5 repeticiones.",
+    "descriptionEn": "Classic linear strength progression on barbell compounds for 5 sets of 5 reps.",
+    "routines": [
+      {
+        "id": "template-5x5-a",
+        "nameEs": "Fuerza 5x5 · A",
+        "nameEn": "Strength 5x5 · A",
+        "notesEs": "Sentadilla, press banca y remo Pendlay.",
+        "notesEn": "Squat, bench press and Pendlay row.",
+        "exercises": [
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000064",
+            "restSeconds": 180,
+            "notesEs": "Sube peso en cada sesión completada.",
+            "notesEn": "Add weight after each completed session.",
+            "sets": [
+              { "setType": "WARMUP", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000001",
+            "restSeconds": 180,
+            "sets": [
+              { "setType": "WARMUP", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000020",
+            "restSeconds": 180,
+            "sets": [
+              { "setType": "WARMUP", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "template-5x5-b",
+        "nameEs": "Fuerza 5x5 · B",
+        "nameEn": "Strength 5x5 · B",
+        "notesEs": "Sentadilla, press militar y una serie efectiva pesada de peso muerto.",
+        "notesEn": "Squat, overhead press and one heavy working set of deadlift.",
+        "exercises": [
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000064",
+            "restSeconds": 180,
+            "sets": [
+              { "setType": "WARMUP", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000028",
+            "restSeconds": 180,
+            "sets": [
+              { "setType": "WARMUP", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 }
+            ]
+          },
+          {
+            "exerciseId": "10000000-0000-4000-8000-000000000105",
+            "restSeconds": 180,
+            "notesEs": "Una única serie efectiva pesada de 5 repeticiones tras calentar.",
+            "notesEn": "One heavy working set of 5 reps after warming up.",
+            "sets": [
+              { "setType": "WARMUP", "targetRepsMin": 5, "targetRepsMax": 5 },
+              { "setType": "WARMUP", "targetRepsMin": 3, "targetRepsMax": 3 },
+              { "setType": "NORMAL", "targetRepsMin": 5, "targetRepsMax": 5 }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

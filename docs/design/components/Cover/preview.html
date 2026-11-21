@@ -1,0 +1,50 @@
+<!-- @dsCard height=288 -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Ferro</title>
+<style>
+  html, body { margin:0; height:100%; }
+  body { background:var(--bg); color:var(--ink); font-family:var(--font-sans); overflow:hidden; }
+  .cover { position:relative; height:288px; overflow:hidden; }
+  .art { position:absolute; top:0; left:480px; width:480px; height:288px; overflow:hidden; }
+  .art svg { display:block; width:480px; height:288px; }
+  .deep { fill:var(--ink); }
+  .brand { fill:var(--brasa); }
+  .tint { fill:var(--brasa-soft); }
+  .bar { fill:var(--brasa-text); }
+  .words { position:absolute; left:var(--space-6); bottom:var(--space-6); max-width:440px; }
+  .name { margin:0; font-family:var(--font-display); font-size:120px; line-height:.9; font-weight:700; letter-spacing:.01em; color:var(--ink); text-transform:uppercase; }
+  .tag { margin:var(--space-2) 0 0 4px; font-size:14px; line-height:20px; color:var(--ink-muted); }
+</style>
+</head>
+<body>
+<div class="cover">
+<div class="art" aria-hidden="true">
+<svg viewBox="0 0 480 288" width="480" height="288">
+<!--
+  blocks      ink slab 160x256 bled off the top (the forged plate, chamfered 24) · brasa 128x192 (the ember, largest hue) · brasa-soft 160x144 bleeding off the right · ember square 32x32 set in the slab corner like the F's hot tip — about 40% of the box
+  arrangement one tall slab with satellites, bottoms on one line at y=240 (space-7 above the edge), space-4 gutters
+  pattern     stripes, from "Los números mandan": six brasa-text bars, space-2 tall at space-4 pitch, of unequal length like the rows of a set table, over the tint
+  scales      sides in space-2 multiples; gutters space-4; pitch space-4; chamfer 24 (3 x space-2) is the brand corner; bars rx radius-sm
+-->
+<polygon class="deep" points="16,-16 152,-16 176,8 176,216 152,240 40,240 16,216"/>
+<rect class="brand" x="128" y="24" width="32" height="32"/>
+<polygon class="brand" points="192,48 296,48 320,72 320,240 192,240"/>
+<rect class="tint" x="336" y="96" width="160" height="144"/>
+<rect class="bar" x="352" y="120" width="96" height="8" rx="4"/>
+<rect class="bar" x="352" y="136" width="64" height="8" rx="4"/>
+<rect class="bar" x="352" y="152" width="112" height="8" rx="4"/>
+<rect class="bar" x="352" y="168" width="80" height="8" rx="4"/>
+<rect class="bar" x="352" y="184" width="104" height="8" rx="4"/>
+<rect class="bar" x="352" y="200" width="48" height="8" rx="4"/>
+</svg>
+</div>
+<div class="words">
+<h1 class="name">Ferro</h1>
+<p class="tag">Registra el hierro. Mide el progreso.</p>
+</div>
+</div>
+</body>
+</html>

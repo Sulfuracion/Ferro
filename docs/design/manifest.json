@@ -1,0 +1,151 @@
+{
+  "manifestVersion": 3,
+  "name": "Ferro",
+  "namespace": "Ferro",
+  "files": [
+    "assets/Logos/README.md",
+    "components/Button/README.md",
+    "components/RestTimer/README.md",
+    "components/SetRow/README.md",
+    "components/SetTypeBadge/README.md",
+    "components/bundle.css",
+    "tokens.css"
+  ],
+  "libraries": [],
+  "components": [
+    {
+      "name": "Button",
+      "group": "Acciones",
+      "summary": "Acción en una línea, con verbo primero: \"Empezar entreno\", \"Añadir serie\", \"Terminar\"."
+    },
+    {
+      "name": "RestTimer",
+      "group": "Entreno",
+      "summary": "Barra fija sobre el borde inferior del entreno activo que cuenta el descanso tras marcar una serie."
+    },
+    {
+      "name": "SetRow",
+      "group": "Entreno",
+      "summary": "Una serie dentro de la tarjeta de ejercicio del entreno activo: tipo, lo que hiciste la última vez, peso, reps y casilla de hecho."
+    },
+    {
+      "name": "SetTypeBadge",
+      "group": "Entreno",
+      "summary": "Indica el tipo de serie en la primera columna de la tabla: número para la normal y letra para las especiales."
+    }
+  ],
+  "assetGroups": [
+    {
+      "name": "Logos",
+      "tile": "l",
+      "order": [
+        "ferro-mark.svg",
+        "ferro-lockup-on-dark.svg",
+        "ferro-lockup-on-light.svg",
+        "ferro-wordmark-on-dark.svg",
+        "ferro-wordmark-on-light.svg",
+        "app-icon.png",
+        "app-icon.svg",
+        "adaptive-icon-foreground.png",
+        "adaptive-icon-foreground.svg"
+      ],
+      "files": [
+        {
+          "path": "assets/Logos/ferro-mark.svg",
+          "id": "a5df18aa0e99d3abeb982d892715ca35"
+        },
+        {
+          "path": "assets/Logos/ferro-lockup-on-dark.svg",
+          "id": "ef15e82338bb3c2e30e1926e2ea108fe"
+        },
+        {
+          "path": "assets/Logos/ferro-lockup-on-light.svg",
+          "id": "f3859a908c3f5abb772e2c8e8bfb3d7b"
+        },
+        {
+          "path": "assets/Logos/ferro-wordmark-on-dark.svg",
+          "id": "e064b4e8e3baec6d415d57ce854f98f2"
+        },
+        {
+          "path": "assets/Logos/ferro-wordmark-on-light.svg",
+          "id": "bb412d444494b46b14c1d226f4ae1eaf"
+        },
+        {
+          "path": "assets/Logos/app-icon.png",
+          "id": "dbb38a8e70e4e61dc4d3b977a6075753"
+        },
+        {
+          "path": "assets/Logos/app-icon.svg",
+          "id": "2fecce91dfda5b85e862c32fb8df79d6"
+        },
+        {
+          "path": "assets/Logos/adaptive-icon-foreground.png",
+          "id": "c493a1c68f1e557e552de2d6cfc6c920"
+        },
+        {
+          "path": "assets/Logos/adaptive-icon-foreground.svg",
+          "id": "4e05a18297c71b6fddd3ee2b5dd9dee4"
+        }
+      ]
+    }
+  ],
+  "storage": {
+    "files": {
+      "assets/Logos/adaptive-icon-foreground.png": {
+        "store": "blob",
+        "id": "c493a1c68f1e557e552de2d6cfc6c920",
+        "bytes": 5349,
+        "type": "image/png"
+      },
+      "assets/Logos/adaptive-icon-foreground.svg": {
+        "store": "blob",
+        "id": "4e05a18297c71b6fddd3ee2b5dd9dee4",
+        "bytes": 420,
+        "type": "image/svg+xml"
+      },
+      "assets/Logos/app-icon.png": {
+        "store": "blob",
+        "id": "dbb38a8e70e4e61dc4d3b977a6075753",
+        "bytes": 5650,
+        "type": "image/png"
+      },
+      "assets/Logos/app-icon.svg": {
+        "store": "blob",
+        "id": "2fecce91dfda5b85e862c32fb8df79d6",
+        "bytes": 471,
+        "type": "image/svg+xml"
+      },
+      "assets/Logos/ferro-lockup-on-dark.svg": {
+        "store": "blob",
+        "id": "ef15e82338bb3c2e30e1926e2ea108fe",
+        "bytes": 1647,
+        "type": "image/svg+xml"
+      },
+      "assets/Logos/ferro-lockup-on-light.svg": {
+        "store": "blob",
+        "id": "f3859a908c3f5abb772e2c8e8bfb3d7b",
+        "bytes": 1647,
+        "type": "image/svg+xml"
+      },
+      "assets/Logos/ferro-mark.svg": {
+        "store": "blob",
+        "id": "a5df18aa0e99d3abeb982d892715ca35",
+        "bytes": 436,
+        "type": "image/svg+xml"
+      },
+      "assets/Logos/ferro-wordmark-on-dark.svg": {
+        "store": "blob",
+        "id": "e064b4e8e3baec6d415d57ce854f98f2",
+        "bytes": 1193,
+        "type": "image/svg+xml"
+      },
+      "assets/Logos/ferro-wordmark-on-light.svg": {
+        "store": "blob",
+        "id": "bb412d444494b46b14c1d226f4ae1eaf",
+        "bytes": 1193,
+        "type": "image/svg+xml"
+      }
+    },
+    "blobBytesUsed": 18006
+  }
+}

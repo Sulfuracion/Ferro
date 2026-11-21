@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tema de ventana: AppCompat es necesario para el cambio de idioma por app en Android 8–12.
+         Todo el aspecto visual lo pone FerroTheme (Compose). -->
+    <style name="Theme.Ferro" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/ferro_window_background</item>
+    </style>
+
+    <style name="Theme.Ferro.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/ferro_splash_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.Ferro</item>
+    </style>
+</resources>

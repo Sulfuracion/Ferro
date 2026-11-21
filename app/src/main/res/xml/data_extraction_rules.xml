@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copia de seguridad automática de Android (API 31+). Los datos viven solo en el
+     dispositivo; la copia exportable de Ferro es el JSON de feature.backup. -->
+<data-extraction-rules>
+    <cloud-backup>
+        <include domain="database" path="." />
+        <include domain="sharedpref" path="." />
+        <include domain="file" path="datastore/" />
+    </cloud-backup>
+    <device-transfer>
+        <include domain="database" path="." />
+        <include domain="sharedpref" path="." />
+        <include domain="file" path="." />
+    </device-transfer>
+</data-extraction-rules>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Símbolo Ferro para la pantalla de splash (docs/design/assets/Logos/ferro-mark.svg) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="96"
+    android:viewportHeight="96">
+    <group
+        android:scaleX="0.58"
+        android:scaleY="0.58"
+        android:translateX="48"
+        android:translateY="48">
+        <group
+            android:translateX="-48"
+            android:translateY="-48">
+            <path
+                android:fillColor="@color/ferro_iron"
+                android:pathData="M16,0L80,0L96,16L96,80L80,96L16,96L0,80L0,16Z" />
+            <path
+                android:fillColor="@color/ferro_ink_on_iron"
+                android:pathData="M30,20h14v56h-14z" />
+            <path
+                android:fillColor="@color/ferro_ink_on_iron"
+                android:pathData="M30,20h26v14h-26z" />
+            <path
+                android:fillColor="@color/ferro_brasa"
+                android:pathData="M56,20h14v14h-14z" />
+            <path
+                android:fillColor="@color/ferro_ink_on_iron"
+                android:pathData="M30,42h28v13h-28z" />
+        </group>
+    </group>
+</vector>

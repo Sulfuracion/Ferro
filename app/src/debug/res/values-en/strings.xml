@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="catalog_title">Ferro Catalog</string>
+    <string name="catalog_theme_system">System</string>
+    <string name="catalog_theme_light">Light</string>
+    <string name="catalog_theme_dark">Dark</string>
+    <string name="catalog_section_colors">Colors</string>
+    <string name="catalog_section_typography">Typography</string>
+    <string name="catalog_section_buttons">Buttons</string>
+    <string name="catalog_section_inputs">Fields &amp; chips</string>
+    <string name="catalog_section_badges">Set type badges</string>
+    <string name="catalog_section_cards_lists">Cards &amp; lists</string>
+    <string name="catalog_section_modals">Sheets &amp; dialogs</string>
+    <string name="catalog_section_empty">Empty state</string>
+    <string name="catalog_section_icons">Icons (Sharp)</string>
+    <string name="catalog_btn_primary">Start workout</string>
+    <string name="catalog_btn_secondary">Add exercise</string>
+    <string name="catalog_btn_ghost">Add set</string>
+    <string name="catalog_btn_danger">Discard workout</string>
+    <string name="catalog_btn_disabled">Disabled</string>
+    <string name="catalog_open_sheet">Open bottom sheet</string>
+    <string name="catalog_open_dialog">Open dialog</string>
+    <string name="catalog_sheet_title">Set type</string>
+    <string name="catalog_dialog_title">Delete this workout?</string>
+    <string name="catalog_dialog_message">This can\'t be undone.</string>
+    <string name="catalog_dialog_confirm">Delete</string>
+    <string name="catalog_empty_title">No workouts yet</string>
+    <string name="catalog_empty_desc">Start your first one.</string>
+    <string name="catalog_sample_exercise">Barbell bench press</string>
+    <string name="catalog_sample_meta">3 days ago · 52 min</string>
+    <string name="catalog_sample_chip_1">Chest</string>
+    <string name="catalog_sample_chip_2">Back</string>
+    <string name="catalog_sample_chip_3">Legs</string>
+    <string name="catalog_sample_placeholder_reps">8–10</string>
+</resources>
