@@ -94,6 +94,14 @@ class WorkoutCalculationsTest {
 
         // 100*5 + 100*4 + 70*8 + 20*10 = 500 + 400 + 560 + 200 = 1660 kg
         assertEquals(1660.0, computeWorkoutVolumeKg(workout, trackingMap), 1e-6)
+        // Con peso corporal 80 kg:
+        // bench: 1460
+        // weighted dips: (80 + 20) * 10 = 1000
+        // assisted pullups: (80 - 30) * 8 = 400
+        // total = 2860 kg
+        assertEquals(2860.0, computeWorkoutVolumeKg(workout, trackingMap, bodyWeightKg = 80.0), 1e-6)
+        // Si la asistencia supera o iguala el peso corporal, ese ejercicio aporta 0 kg
+        assertEquals(1960.0, computeWorkoutVolumeKg(workout, trackingMap, bodyWeightKg = 30.0), 1e-6)
         assertEquals(7, computeCompletedSetsCount(workout))
         assertEquals(8, computeTotalSetsCount(workout))
         assertEquals(1, computeIncompleteSetsCount(workout))

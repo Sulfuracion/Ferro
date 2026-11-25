@@ -7,6 +7,7 @@ import com.davidguijo.ferro.core.data.mapper.toDomain
 import com.davidguijo.ferro.core.data.mapper.toEntity
 import com.davidguijo.ferro.core.domain.BrokenRecord
 import com.davidguijo.ferro.core.domain.Records
+import com.davidguijo.ferro.core.domain.model.ExerciseRecordDetail
 import com.davidguijo.ferro.core.domain.model.PersonalRecord
 import com.davidguijo.ferro.core.domain.model.RecordType
 import com.davidguijo.ferro.core.domain.model.TrackingType
@@ -31,8 +32,36 @@ constructor(
     override fun observeRecordsForExercise(exerciseId: String): Flow<List<PersonalRecord>> =
         personalRecordDao.observeRecordsForExercise(exerciseId).map { list -> list.map { it.toDomain() } }
 
+    override fun observeRecordDetailsForExercise(exerciseId: String): Flow<List<ExerciseRecordDetail>> =
+        personalRecordDao.observeRecordDetailsForExercise(exerciseId).map { rows ->
+            rows.map { row ->
+                ExerciseRecordDetail(
+                    record =
+                        PersonalRecord(
+                            id = row.id,
+                            exerciseId = row.exerciseId,
+                            recordType = row.recordType,
+                            value = row.value,
+                            workoutSetId = row.workoutSetId,
+                            achievedAt = row.achievedAt,
+                            createdAt = row.createdAt,
+                            updatedAt = row.updatedAt
+                        ),
+                    weightKg = row.weightKg,
+                    reps = row.reps,
+                    durationS = row.durationS,
+                    distanceM = row.distanceM
+                )
+            }
+        }
+
     override fun observeRecordsForWorkout(workoutId: String): Flow<List<PersonalRecord>> =
         personalRecordDao.observeRecordsForWorkout(workoutId).map { list -> list.map { it.toDomain() } }
+
+    override fun observeRecordCountsByWorkout(): Flow<Map<String, Int>> =
+        personalRecordDao.observeRecordCountsByWorkout().map { rows ->
+            rows.associate { it.workoutId to it.recordCount }
+        }
 
     override suspend fun getLatestRecord(exerciseId: String, recordType: RecordType): PersonalRecord? =
         personalRecordDao.getLatestRecord(exerciseId = exerciseId, recordType = recordType)?.toDomain()

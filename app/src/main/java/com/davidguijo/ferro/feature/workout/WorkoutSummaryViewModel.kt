@@ -24,6 +24,7 @@ import com.davidguijo.ferro.core.domain.model.Settings
 import com.davidguijo.ferro.core.domain.model.TrackingType
 import com.davidguijo.ferro.core.domain.model.WorkoutSet
 import com.davidguijo.ferro.core.domain.model.WorkoutWithExercises
+import com.davidguijo.ferro.core.domain.repository.BodyMeasurementRepository
 import com.davidguijo.ferro.core.domain.repository.ExerciseRepository
 import com.davidguijo.ferro.core.domain.repository.PersonalRecordRepository
 import com.davidguijo.ferro.core.domain.repository.RoutineRepository
@@ -42,6 +43,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -118,7 +120,8 @@ internal constructor(
     exerciseRepository: ExerciseRepository,
     settingsRepository: SettingsRepository,
     private val clock: Clock,
-    private val systemLanguageProvider: () -> String
+    private val systemLanguageProvider: () -> String,
+    bodyMeasurementRepository: BodyMeasurementRepository? = null
 ) : ViewModel() {
     @Inject
     constructor(
@@ -128,6 +131,7 @@ internal constructor(
         personalRecordRepository: PersonalRecordRepository,
         exerciseRepository: ExerciseRepository,
         settingsRepository: SettingsRepository,
+        bodyMeasurementRepository: BodyMeasurementRepository,
         clock: Clock
     ) : this(
         workoutId = savedStateHandle.toRoute<WorkoutSummaryRoute>().workoutId,
@@ -137,7 +141,8 @@ internal constructor(
         exerciseRepository = exerciseRepository,
         settingsRepository = settingsRepository,
         clock = clock,
-        systemLanguageProvider = { Locale.getDefault().language }
+        systemLanguageProvider = { Locale.getDefault().language },
+        bodyMeasurementRepository = bodyMeasurementRepository
     )
 
     private val routineUpdatedFlag = MutableStateFlow(false)
@@ -168,18 +173,23 @@ internal constructor(
             }
         }
 
+    private val latestBodyWeightFlow =
+        bodyMeasurementRepository?.observeLatestMeasurement()?.map { it?.weightKg } ?: flowOf(null)
+
     private val baseDataFlow =
         combine(
             workoutFlow,
             personalRecordRepository.observeRecordsForWorkout(workoutId),
             exerciseRepository.observeAllExercises(),
-            settingsRepository.observeSettings()
-        ) { workout, records, exercises, settings ->
+            settingsRepository.observeSettings(),
+            latestBodyWeightFlow
+        ) { workout, records, exercises, settings, latestBodyWeightKg ->
             BaseSummaryData(
                 workout = workout,
                 records = records,
                 exercises = exercises,
-                settings = settings
+                settings = settings,
+                latestBodyWeightKg = latestBodyWeightKg
             )
         }
 
@@ -205,7 +215,7 @@ internal constructor(
 
             val endedAt = workoutWithExercises.workout.endedAt ?: workoutWithExercises.workout.updatedAt
             val durationMs = (endedAt - workoutWithExercises.workout.startedAt).coerceAtLeast(0L)
-            val volumeKg = computeWorkoutVolumeKg(workoutWithExercises, trackingTypesById)
+            val volumeKg = computeWorkoutVolumeKg(workoutWithExercises, trackingTypesById, base.latestBodyWeightKg)
 
             val recordsBySetId = Records.groupRecordTypesBySetId(base.records)
             val setsById =
@@ -338,7 +348,8 @@ internal constructor(
         val workout: WorkoutWithExercises?,
         val records: List<PersonalRecord>,
         val exercises: List<Exercise>,
-        val settings: Settings
+        val settings: Settings,
+        val latestBodyWeightKg: Double?
     )
 
     private data class RoutineContext(

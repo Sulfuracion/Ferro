@@ -2,14 +2,18 @@ package com.davidguijo.ferro.feature.workout
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.davidguijo.ferro.core.domain.computeWeeklyStreak
 import com.davidguijo.ferro.core.domain.localizedName
 import com.davidguijo.ferro.core.domain.model.Exercise
 import com.davidguijo.ferro.core.domain.model.RoutineWithExercises
 import com.davidguijo.ferro.core.domain.repository.ExerciseRepository
 import com.davidguijo.ferro.core.domain.repository.RoutineRepository
 import com.davidguijo.ferro.core.domain.repository.SettingsRepository
+import com.davidguijo.ferro.core.domain.repository.WorkoutRepository
 import com.davidguijo.ferro.core.domain.resolveIsSpanish
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.Clock
+import java.time.ZoneId
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,6 +40,8 @@ sealed interface TrainStartRequest {
 
 data class TrainUiState(
     val routines: List<TrainRoutineItemUi> = emptyList(),
+    val consecutiveWeeks: Int = 0,
+    val workoutsThisWeek: Int = 0,
     val activeWorkoutName: String? = null,
     val pendingConflict: TrainStartRequest? = null,
     val shouldOpenActiveWorkout: Boolean = false
@@ -47,7 +53,10 @@ internal constructor(
     routineRepository: RoutineRepository,
     exerciseRepository: ExerciseRepository,
     settingsRepository: SettingsRepository,
+    workoutRepository: WorkoutRepository,
     private val activeWorkoutManager: ActiveWorkoutManager,
+    private val clock: Clock,
+    private val zoneId: ZoneId,
     private val systemLanguageProvider: () -> String
 ) : ViewModel() {
     @Inject
@@ -55,12 +64,17 @@ internal constructor(
         routineRepository: RoutineRepository,
         exerciseRepository: ExerciseRepository,
         settingsRepository: SettingsRepository,
-        activeWorkoutManager: ActiveWorkoutManager
+        workoutRepository: WorkoutRepository,
+        activeWorkoutManager: ActiveWorkoutManager,
+        clock: Clock
     ) : this(
         routineRepository = routineRepository,
         exerciseRepository = exerciseRepository,
         settingsRepository = settingsRepository,
+        workoutRepository = workoutRepository,
         activeWorkoutManager = activeWorkoutManager,
+        clock = clock,
+        zoneId = ZoneId.systemDefault(),
         systemLanguageProvider = { Locale.getDefault().language }
     )
 
@@ -74,16 +88,21 @@ internal constructor(
 
     val uiState: StateFlow<TrainUiState> =
         combine(
-            routineRepository.observeAllRoutinesWithExercises(),
-            exerciseRepository.observeAllExercises(),
-            settingsRepository.observeSettings(),
+            combine(
+                routineRepository.observeAllRoutinesWithExercises(),
+                exerciseRepository.observeAllExercises(),
+                settingsRepository.observeSettings(),
+                workoutRepository.observeCompletedWorkouts()
+            ) { routines, exercises, settings, completedWorkouts ->
+                TrainDataBundle(routines, exercises, settings, completedWorkouts)
+            },
             activeWorkoutManager.state,
             localOverlay
-        ) { routines, exercises, settings, activeSession, overlay ->
-            val isSpanish = resolveIsSpanish(settings.language, systemLanguageProvider())
-            val exercisesById = exercises.associateBy { it.id }
+        ) { bundle, activeSession, overlay ->
+            val isSpanish = resolveIsSpanish(bundle.settings.language, systemLanguageProvider())
+            val exercisesById = bundle.exercises.associateBy { it.id }
             val routineItems =
-                routines
+                bundle.routines
                     .sortedWith(
                         compareBy<RoutineWithExercises> { it.routine.position }
                             .thenBy { it.routine.name.lowercase() }
@@ -91,8 +110,17 @@ internal constructor(
                     .map { rwe ->
                         rwe.toTrainRoutineItem(exercisesById, isSpanish)
                     }
+            val streak =
+                computeWeeklyStreak(
+                    completedWorkoutStartMillis = bundle.completedWorkouts.map { it.startedAt },
+                    nowMillis = clock.millis(),
+                    firstDayOfWeek = bundle.settings.firstDayOfWeek,
+                    zoneId = zoneId
+                )
             TrainUiState(
                 routines = routineItems,
+                consecutiveWeeks = streak.consecutiveWeeks,
+                workoutsThisWeek = streak.workoutsThisWeek,
                 activeWorkoutName = activeSession.workout?.workout?.name,
                 pendingConflict = overlay.pendingConflict,
                 shouldOpenActiveWorkout = overlay.shouldOpenActiveWorkout
@@ -177,5 +205,12 @@ internal constructor(
     private data class LocalOverlay(
         val pendingConflict: TrainStartRequest? = null,
         val shouldOpenActiveWorkout: Boolean = false
+    )
+
+    private data class TrainDataBundle(
+        val routines: List<RoutineWithExercises>,
+        val exercises: List<Exercise>,
+        val settings: com.davidguijo.ferro.core.domain.model.Settings,
+        val completedWorkouts: List<com.davidguijo.ferro.core.domain.model.Workout>
     )
 }

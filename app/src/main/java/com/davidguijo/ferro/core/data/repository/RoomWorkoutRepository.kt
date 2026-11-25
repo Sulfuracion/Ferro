@@ -1,11 +1,20 @@
 package com.davidguijo.ferro.core.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.map
 import com.davidguijo.ferro.core.data.local.dao.WorkoutDao
 import com.davidguijo.ferro.core.data.mapper.toDomain
 import com.davidguijo.ferro.core.data.mapper.toEntity
 import com.davidguijo.ferro.core.domain.model.ExerciseHistoryEntry
+import com.davidguijo.ferro.core.domain.model.ExerciseSessionMetricRow
+import com.davidguijo.ferro.core.domain.model.MuscleExerciseSetAggregate
+import com.davidguijo.ferro.core.domain.model.MuscleLastTrainedAggregate
+import com.davidguijo.ferro.core.domain.model.RepMaxEntry
 import com.davidguijo.ferro.core.domain.model.Workout
 import com.davidguijo.ferro.core.domain.model.WorkoutExercise
+import com.davidguijo.ferro.core.domain.model.WorkoutSessionAggregate
 import com.davidguijo.ferro.core.domain.model.WorkoutSet
 import com.davidguijo.ferro.core.domain.model.WorkoutStatus
 import com.davidguijo.ferro.core.domain.model.WorkoutWithExercises
@@ -35,6 +44,15 @@ constructor(private val workoutDao: WorkoutDao, private val clock: Clock) :
     override fun observeCompletedWorkouts(): Flow<List<Workout>> =
         workoutDao.observeCompletedWorkouts().map { list -> list.map { it.toDomain() } }
 
+    override fun pagingCompletedWorkouts(): Flow<PagingData<WorkoutWithExercises>> = Pager(
+        config = PagingConfig(pageSize = HISTORY_PAGE_SIZE, enablePlaceholders = false),
+        pagingSourceFactory = { workoutDao.pagingCompletedWorkouts() }
+    ).flow.map { pagingData -> pagingData.map { it.toDomain() } }
+
+    private companion object {
+        const val HISTORY_PAGE_SIZE = 20
+    }
+
     override fun observeCompletedWorkoutsInRange(startMillis: Long, endMillis: Long): Flow<List<Workout>> = workoutDao
         .observeCompletedWorkoutsInRange(startMillis = startMillis, endMillis = endMillis)
         .map { list -> list.map { it.toDomain() } }
@@ -63,6 +81,76 @@ constructor(private val workoutDao: WorkoutDao, private val clock: Clock) :
     override suspend fun getExerciseHistory(exerciseId: String, excludeWorkoutId: String?): List<ExerciseHistoryEntry> =
         workoutDao.getExerciseHistory(exerciseId = exerciseId, excludeWorkoutId = excludeWorkoutId).map {
             it.toDomain()
+        }
+
+    override fun observeExerciseChartMetrics(
+        exerciseId: String,
+        sinceMillis: Long?
+    ): Flow<List<ExerciseSessionMetricRow>> = workoutDao
+        .observeExerciseChartMetrics(exerciseId = exerciseId, sinceMillis = sinceMillis)
+        .map { rows ->
+            rows.map { row ->
+                ExerciseSessionMetricRow(
+                    workoutId = row.workoutId,
+                    startedAt = row.startedAt,
+                    estimated1RmKg = row.estimated1RmKg,
+                    maxWeightKg = row.maxWeightKg,
+                    bestSetVolumeKg = row.bestSetVolumeKg,
+                    sessionVolumeKg = row.sessionVolumeKg
+                )
+            }
+        }
+
+    override fun observeExerciseRepMaxes(exerciseId: String): Flow<List<RepMaxEntry>> =
+        workoutDao.observeExerciseRepMaxes(exerciseId = exerciseId).map { rows ->
+            rows.map { row ->
+                RepMaxEntry(
+                    reps = row.reps,
+                    weightKg = row.bestWeightKg,
+                    achievedAt = row.achievedAt
+                )
+            }
+        }
+
+    override fun observeCompletedWorkoutAggregatesSince(
+        sinceMillis: Long,
+        latestBodyWeightKg: Double?
+    ): Flow<List<WorkoutSessionAggregate>> = workoutDao
+        .observeCompletedWorkoutAggregatesSince(
+            sinceMillis = sinceMillis,
+            latestBodyWeightKg = latestBodyWeightKg
+        ).map { rows ->
+            rows.map { row ->
+                WorkoutSessionAggregate(
+                    workoutId = row.workoutId,
+                    startedAt = row.startedAt,
+                    endedAt = row.endedAt,
+                    volumeKg = row.volumeKg
+                )
+            }
+        }
+
+    override fun observeMuscleSetAggregatesSince(sinceMillis: Long): Flow<List<MuscleExerciseSetAggregate>> =
+        workoutDao.observeMuscleSetAggregatesSince(sinceMillis = sinceMillis).map { rows ->
+            rows.map { row ->
+                MuscleExerciseSetAggregate(
+                    workoutStartedAt = row.workoutStartedAt,
+                    primaryMuscle = row.primaryMuscle,
+                    secondaryMuscles = row.secondaryMuscles,
+                    completedSetCount = row.completedSetCount
+                )
+            }
+        }
+
+    override fun observeMuscleLastTrained(): Flow<List<MuscleLastTrainedAggregate>> =
+        workoutDao.observeMuscleLastTrained().map { rows ->
+            rows.map { row ->
+                MuscleLastTrainedAggregate(
+                    primaryMuscle = row.primaryMuscle,
+                    secondaryMuscles = row.secondaryMuscles,
+                    lastTrainedAt = row.lastTrainedAt
+                )
+            }
         }
 
     override suspend fun saveWorkoutWithExercises(workoutWithExercises: WorkoutWithExercises) {

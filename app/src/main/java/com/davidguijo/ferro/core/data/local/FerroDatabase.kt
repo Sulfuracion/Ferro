@@ -1,8 +1,10 @@
 package com.davidguijo.ferro.core.data.local
 
 import androidx.room3.ColumnTypeConverters
+import androidx.room3.DaoReturnTypeConverters
 import androidx.room3.Database
 import androidx.room3.RoomDatabase
+import androidx.room3.paging.PagingSourceDaoReturnTypeConverter
 import com.davidguijo.ferro.core.data.local.dao.BodyMeasurementDao
 import com.davidguijo.ferro.core.data.local.dao.ExerciseDao
 import com.davidguijo.ferro.core.data.local.dao.PersonalRecordDao
@@ -38,6 +40,7 @@ import com.davidguijo.ferro.core.data.local.entity.WorkoutSetEntity
     exportSchema = true
 )
 @ColumnTypeConverters(FerroTypeConverters::class)
+@DaoReturnTypeConverters(PagingSourceDaoReturnTypeConverter::class)
 abstract class FerroDatabase : RoomDatabase() {
     internal abstract fun exerciseDao(): ExerciseDao
 

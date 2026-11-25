@@ -9,6 +9,7 @@ import com.davidguijo.ferro.core.domain.RestTimerState
 import com.davidguijo.ferro.core.domain.SetTargetPlaceholder
 import com.davidguijo.ferro.core.domain.applyTargetPlaceholderIfBlank
 import com.davidguijo.ferro.core.domain.createEmptyWorkout
+import com.davidguijo.ferro.core.domain.createWorkoutFromCompletedWorkout
 import com.davidguijo.ferro.core.domain.createWorkoutFromRoutine
 import com.davidguijo.ferro.core.domain.model.ExerciseHistoryEntry
 import com.davidguijo.ferro.core.domain.model.SetType
@@ -229,6 +230,32 @@ internal constructor(
 
         val now = clock.millis()
         val result = createWorkoutFromRoutine(routine = routine, nowMillis = now)
+        val historyEntries = loadHistoryEntries(result.workout)
+        lastSessionsByWorkoutExerciseId = historyEntries
+        val previousMap = buildPreviousMap(result.workout, historyEntries)
+
+        _state.update {
+            it.copy(
+                isRestored = true,
+                workout = result.workout,
+                targetPlaceholdersBySetId = result.targetPlaceholdersBySetId,
+                previousSetsByWorkoutExerciseId = previousMap,
+                restTimer = null
+            )
+        }
+        flushNow()
+        notificationController.syncWorkoutNotification(result.workout, restTimer = null)
+        return result.workout
+    }
+
+    /** Inicia un entreno nuevo copiando la estructura de una sesión pasada completada. */
+    suspend fun startFromCompletedWorkout(sourceWorkoutId: String): WorkoutWithExercises? {
+        restoreIfNeeded()
+        val source = workoutRepository.getWorkoutWithExercises(sourceWorkoutId) ?: return null
+        discardExistingIfAnyInternal()
+
+        val now = clock.millis()
+        val result = createWorkoutFromCompletedWorkout(source = source, nowMillis = now)
         val historyEntries = loadHistoryEntries(result.workout)
         lastSessionsByWorkoutExerciseId = historyEntries
         val previousMap = buildPreviousMap(result.workout, historyEntries)

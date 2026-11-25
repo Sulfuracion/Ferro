@@ -117,4 +117,23 @@ class UnitsTest {
         assertEquals(45.359237, Units.parseWeightToKg("100", WeightUnit.LB)!!, 1e-9)
         assertNull(Units.parseWeightToKg("", WeightUnit.LB))
     }
+
+    @Test
+    fun `conversion cm a pulgadas y viceversa es exacta`() {
+        assertEquals(25.4, Units.inchesToCm(10.0), 1e-12)
+        assertEquals(10.0, Units.cmToInches(25.4), 1e-12)
+        assertEquals(82.55, Units.toCm(32.5, LengthUnit.IN), 1e-12)
+        assertEquals(32.5, Units.fromCm(82.55, LengthUnit.IN), 1e-12)
+        assertEquals(LengthUnit.CM, Units.lengthUnitFor(WeightUnit.KG))
+        assertEquals(LengthUnit.IN, Units.lengthUnitFor(WeightUnit.LB))
+    }
+
+    @Test
+    fun `formatLength y parseLengthToCm respetan la unidad y el locale`() {
+        assertEquals("82,5 cm", Units.formatLength(82.5, LengthUnit.CM, localeEs, includeUnit = true))
+        assertEquals("32.5 in", Units.formatLength(82.55, LengthUnit.IN, localeEn, includeUnit = true))
+        assertEquals(82.55, Units.parseLengthToCm("32,5", LengthUnit.IN)!!, 1e-9)
+        assertEquals(90.0, Units.parseLengthToCm("90", LengthUnit.CM)!!, 1e-9)
+        assertEquals("15,4 %", Units.formatBodyFat(15.4, localeEs, includeUnit = true))
+    }
 }

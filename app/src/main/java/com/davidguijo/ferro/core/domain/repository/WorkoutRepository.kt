@@ -1,8 +1,14 @@
 package com.davidguijo.ferro.core.domain.repository
 
+import androidx.paging.PagingData
 import com.davidguijo.ferro.core.domain.model.ExerciseHistoryEntry
+import com.davidguijo.ferro.core.domain.model.ExerciseSessionMetricRow
+import com.davidguijo.ferro.core.domain.model.MuscleExerciseSetAggregate
+import com.davidguijo.ferro.core.domain.model.MuscleLastTrainedAggregate
+import com.davidguijo.ferro.core.domain.model.RepMaxEntry
 import com.davidguijo.ferro.core.domain.model.Workout
 import com.davidguijo.ferro.core.domain.model.WorkoutExercise
+import com.davidguijo.ferro.core.domain.model.WorkoutSessionAggregate
 import com.davidguijo.ferro.core.domain.model.WorkoutSet
 import com.davidguijo.ferro.core.domain.model.WorkoutStatus
 import com.davidguijo.ferro.core.domain.model.WorkoutWithExercises
@@ -19,6 +25,8 @@ interface WorkoutRepository {
     suspend fun getWorkoutWithExercises(workoutId: String): WorkoutWithExercises?
 
     fun observeCompletedWorkouts(): Flow<List<Workout>>
+
+    fun pagingCompletedWorkouts(): Flow<PagingData<WorkoutWithExercises>>
 
     fun observeCompletedWorkoutsInRange(startMillis: Long, endMillis: Long): Flow<List<Workout>>
 
@@ -37,6 +45,24 @@ interface WorkoutRepository {
 
     /** Historial completo de sesiones completadas para [exerciseId], en orden cronológico ascendente. */
     suspend fun getExerciseHistory(exerciseId: String, excludeWorkoutId: String? = null): List<ExerciseHistoryEntry>
+
+    /** Métricas agregadas en SQL por sesión para las gráficas de [exerciseId]. */
+    fun observeExerciseChartMetrics(exerciseId: String, sinceMillis: Long?): Flow<List<ExerciseSessionMetricRow>>
+
+    /** Mejor peso registrado en SQL para cada número exacto de repeticiones (1..12) en [exerciseId]. */
+    fun observeExerciseRepMaxes(exerciseId: String): Flow<List<RepMaxEntry>>
+
+    /** Agregados ligeros de volumen y duración por sesión completada desde [sinceMillis]. */
+    fun observeCompletedWorkoutAggregatesSince(
+        sinceMillis: Long,
+        latestBodyWeightKg: Double? = null
+    ): Flow<List<WorkoutSessionAggregate>>
+
+    /** Series completadas (no calentamiento) agrupadas por sesión y ejercicio desde [sinceMillis]. */
+    fun observeMuscleSetAggregatesSince(sinceMillis: Long): Flow<List<MuscleExerciseSetAggregate>>
+
+    /** Última fecha de entreno completado por combinación muscular (agregado en SQL). */
+    fun observeMuscleLastTrained(): Flow<List<MuscleLastTrainedAggregate>>
 
     /** Guarda de forma atómica un entreno completo con sus ejercicios y series. */
     suspend fun saveWorkoutWithExercises(workoutWithExercises: WorkoutWithExercises)

@@ -244,6 +244,7 @@
     <string name="exercise_tab_info">Info</string>
     <string name="exercise_tab_history">History</string>
     <string name="exercise_tab_charts">Charts</string>
+    <string name="exercise_tab_records">Records</string>
     <string name="exercise_detail_primary_muscle">Primary muscle</string>
     <string name="exercise_detail_secondary_muscles">Secondary muscles</string>
     <string name="exercise_detail_equipment">Equipment</string>
@@ -261,8 +262,23 @@
     <string name="exercise_unarchive_confirm_action">Restore</string>
     <string name="exercise_history_empty_title">No history yet</string>
     <string name="exercise_history_empty_description">Your past sets for this exercise will appear here.</string>
-    <string name="exercise_charts_empty_title">No charts yet</string>
-    <string name="exercise_charts_empty_description">Log workouts to track weight, 1RM and volume over time.</string>
+    <string name="exercise_chart_metric_1rm">Estimated 1RM</string>
+    <string name="exercise_chart_metric_max_weight">Max weight</string>
+    <string name="exercise_chart_metric_best_set_volume">Best set</string>
+    <string name="exercise_chart_metric_session_volume">Session volume</string>
+    <string name="exercise_chart_range_1m">1 month</string>
+    <string name="exercise_chart_range_3m">3 months</string>
+    <string name="exercise_chart_range_1y">1 year</string>
+    <string name="exercise_chart_range_all">All</string>
+    <string name="exercise_chart_tap_hint">Tap a point to see date and value.</string>
+    <string name="exercise_chart_insufficient_title">Not enough data</string>
+    <string name="exercise_chart_insufficient_description">Log completed weighted sessions in this range to see the chart.</string>
+    <string name="exercise_chart_single_point_note">Only 1 session in this range. Log another to see the trend.</string>
+    <string name="exercise_records_empty_title">No records yet</string>
+    <string name="exercise_records_empty_description">Complete working sets for this exercise to track your best marks.</string>
+    <string name="exercise_records_best_section">Best marks</string>
+    <string name="exercise_records_rep_max_section">Best weight for 1 to 12 reps</string>
+    <string name="exercise_records_rep_max_empty">Log weighted sets between 1 and 12 reps to fill this table.</string>
 
     <string name="exercise_editor_create_title">New exercise</string>
     <string name="exercise_editor_edit_title">Edit exercise</string>
@@ -327,24 +343,136 @@
     <string name="history_title">History</string>
     <string name="history_empty_title">No workouts yet</string>
     <string name="history_empty_description">Start your first one to see it here.</string>
+    <string name="history_open_calendar_cd">Open calendar</string>
+    <string name="history_open_history_cd">Open history</string>
+    <string name="history_duration_unknown">--</string>
+    <string name="history_stat_duration">Duration</string>
+    <string name="history_stat_volume">Volume</string>
+    <string name="history_stat_sets">Sets</string>
+    <string name="history_stat_records">PRs</string>
 
     <string name="session_detail_title">Session detail</string>
     <string name="session_detail_empty_title">No session data</string>
     <string name="session_detail_empty_description">Logged exercises and sets will appear here.</string>
+    <string name="session_detail_edit_cd">Edit session</string>
+    <string name="session_detail_delete_cd">Delete session</string>
+    <string name="session_detail_repeat">Repeat workout</string>
+    <string name="session_detail_save_routine">Save as routine</string>
+    <string name="session_detail_notes_label">Notes</string>
+    <string name="session_detail_exercise_notes_hint">Exercise notes</string>
+    <string name="session_detail_workout_name_label">Session name</string>
+    <string name="session_detail_date_label">Date</string>
+    <string name="session_detail_duration_minutes_label">Duration (min)</string>
+    <string name="session_detail_save_changes">Save</string>
+    <string name="session_detail_cancel_edit">Cancel</string>
+    <string name="session_detail_add_set">Add set</string>
+    <string name="session_detail_remove_set_cd">Remove set</string>
+    <string name="session_detail_delete_title">Delete this workout?</string>
+    <string name="session_detail_delete_message">This can\'t be undone. Personal records will be recalculated.</string>
+    <string name="session_detail_delete_confirm">Delete</string>
+    <string name="session_detail_save_routine_title">Save as routine</string>
+    <string name="session_detail_save_routine_name_label">Routine name</string>
+    <string name="session_detail_save_routine_confirm">Save routine</string>
+    <string name="session_detail_routine_saved">Routine "%1$s" saved.</string>
+    <string name="session_detail_rpe_badge">RPE %1$s</string>
+    <string name="session_detail_set_incomplete">Not completed</string>
+    <string name="session_detail_completed_cd">Set completed</string>
 
     <string name="calendar_title">Calendar</string>
-    <string name="calendar_empty_title">No sessions this month</string>
-    <string name="calendar_empty_description">Your workout days will be marked on the calendar.</string>
+    <string name="calendar_prev_month_cd">Previous month</string>
+    <string name="calendar_next_month_cd">Next month</string>
+    <string name="calendar_today">Today</string>
+    <string name="calendar_day_no_sessions">No workouts on this day.</string>
+
+    <string name="train_streak_title">Weekly streak</string>
+    <string name="train_streak_this_week_label">This week</string>
+    <string name="train_history_action">View history</string>
 
     <!-- Progress -->
     <string name="progress_title">Progress</string>
     <string name="progress_empty_title">No data yet</string>
     <string name="progress_empty_description">Log workouts to see your charts and recovery.</string>
+    <string name="progress_summary_section">Summary (12 weeks)</string>
+    <string name="progress_workouts_per_week_label">Workouts / wk</string>
+    <string name="progress_this_week_label">This week</string>
+    <string name="progress_avg_duration_label">Avg duration</string>
+    <string name="progress_avg_duration_value">%1$d min</string>
+    <string name="progress_weekly_volume_section">Weekly volume</string>
+    <string name="progress_weekly_volume_subtitle">Last 12 weeks (%1$s)</string>
+    <string name="progress_weekly_volume_empty_title">No volume logged</string>
+    <string name="progress_weekly_volume_empty_description">Complete workouts with weighted exercises to see weekly volume.</string>
+    <string name="progress_muscle_sets_section">Sets by muscle group</string>
+    <string name="progress_muscle_sets_rule">Primary muscle: 1 set. Secondary: 0.5 each. Warm-ups excluded.</string>
+    <string name="progress_muscle_sets_header_muscle">Muscle</string>
+    <string name="progress_muscle_sets_header_this_week">This wk</string>
+    <string name="progress_muscle_sets_header_prev_avg">4-wk avg</string>
+    <string name="progress_muscle_sets_empty_title">No recent sets</string>
+    <string name="progress_muscle_sets_empty_description">Complete working sets this week or in the previous 4 weeks to see the comparison.</string>
+    <string name="progress_recovery_section">Muscle group recovery</string>
+    <string name="progress_recovery_empty_title">No recovery data</string>
+    <string name="progress_recovery_empty_description">Complete a workout to see how long each muscle group has rested.</string>
+    <string name="progress_recovery_today">Today</string>
+    <string name="progress_recovery_status_recent">Recent (&lt; 48 h)</string>
+    <string name="progress_recovery_status_moderate">48 to 72 h</string>
+    <string name="progress_recovery_status_ready">Ready</string>
+    <string name="progress_recovery_disclaimer">Simple guideline based only on time since your last workout; not medical advice.</string>
 
     <!-- Measurements & backup -->
     <string name="body_measurements_title">Measurements</string>
     <string name="body_measurements_empty_title">No measurements yet</string>
     <string name="body_measurements_empty_description">Track weight, body fat and circumferences.</string>
+    <string name="body_tab_summary">Measurements</string>
+    <string name="body_tab_charts">Charts</string>
+    <string name="body_tab_photos">Photos</string>
+    <string name="body_add_record">Add entry</string>
+    <string name="body_edit_record">Edit entry</string>
+    <string name="body_section_latest">Latest values</string>
+    <string name="body_section_history">Entry history</string>
+    <string name="body_no_value">—</string>
+    <string name="body_metric_weight">Body weight</string>
+    <string name="body_metric_body_fat" formatted="false">Body fat %</string>
+    <string name="body_metric_neck">Neck</string>
+    <string name="body_metric_chest">Chest</string>
+    <string name="body_metric_waist">Waist</string>
+    <string name="body_metric_hips">Hips</string>
+    <string name="body_metric_arm_l">Left arm</string>
+    <string name="body_metric_arm_r">Right arm</string>
+    <string name="body_metric_thigh_l">Left thigh</string>
+    <string name="body_metric_thigh_r">Right thigh</string>
+    <string name="body_metric_calf">Calf</string>
+    <string name="body_form_date">Date</string>
+    <string name="body_form_notes">Notes</string>
+    <string name="body_form_notes_placeholder">Optional</string>
+    <string name="body_form_save">Save</string>
+    <string name="body_form_cancel">Cancel</string>
+    <string name="body_form_invalid_number">Invalid number</string>
+    <string name="body_form_invalid_body_fat">Must be between 0 and 100</string>
+    <string name="body_delete_title">Delete this entry?</string>
+    <string name="body_delete_message">This can\'t be undone.</string>
+    <string name="body_delete_confirm">Delete</string>
+    <string name="body_edit_cd">Edit entry</string>
+    <string name="body_delete_cd">Delete entry</string>
+    <string name="body_chart_empty_title">Not enough data</string>
+    <string name="body_chart_empty_description">Log this measurement in the selected range to view its chart.</string>
+    <string name="body_photos_empty_title">No progress photos</string>
+    <string name="body_photos_empty_description">Pick a photo from your library or take a new one to track your progress.</string>
+    <string name="body_photos_pick">Choose photo</string>
+    <string name="body_photos_take">Take photo</string>
+    <string name="body_photos_compare">Compare</string>
+    <string name="body_photos_close_compare">Close compare</string>
+    <string name="body_photos_compare_title">Compare photos</string>
+    <string name="body_photos_compare_left">Before</string>
+    <string name="body_photos_compare_right">After</string>
+    <string name="body_photos_compare_pick_hint">Tap a gallery photo to replace</string>
+    <string name="body_photos_pose_title">Pose</string>
+    <string name="body_photos_pose_front">Front</string>
+    <string name="body_photos_pose_side">Side</string>
+    <string name="body_photos_pose_back">Back</string>
+    <string name="body_photos_confirm_save">Save photo</string>
+    <string name="body_photos_delete_title">Delete this photo?</string>
+    <string name="body_photos_delete_message">The image file will also be removed from this device.</string>
+    <string name="body_photos_delete_cd">Delete photo</string>
+    <string name="body_photos_import_error">Couldn\'t save photo. Please try again.</string>
 
     <string name="backup_title">Backup</string>
     <string name="backup_empty_title">Export and import your data</string>
@@ -435,5 +563,25 @@
     <plurals name="active_workout_notification_sets">
         <item quantity="one">%1$d/%2$d set completed</item>
         <item quantity="other">%1$d/%2$d sets completed</item>
+    </plurals>
+    <plurals name="history_records_count">
+        <item quantity="one">%1$d PR</item>
+        <item quantity="other">%1$d PRs</item>
+    </plurals>
+    <plurals name="history_more_exercises">
+        <item quantity="one">+%1$d more</item>
+        <item quantity="other">+%1$d more</item>
+    </plurals>
+    <plurals name="train_streak_weeks">
+        <item quantity="one">%1$d week streak</item>
+        <item quantity="other">%1$d weeks streak</item>
+    </plurals>
+    <plurals name="train_workouts_this_week">
+        <item quantity="one">%1$d workout</item>
+        <item quantity="other">%1$d workouts</item>
+    </plurals>
+    <plurals name="progress_recovery_days_ago">
+        <item quantity="one">%1$d day ago</item>
+        <item quantity="other">%1$d days ago</item>
     </plurals>
 </resources>

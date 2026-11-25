@@ -254,7 +254,6 @@ class RoutinesAndEditorViewModelTest {
             val viewModel =
                 RoutineEditorViewModel(
                     initialRoutineId = null,
-                    savedStateHandle = null,
                     routineRepository = routineRepo,
                     exerciseRepository = exerciseRepo,
                     settingsRepository = settingsRepo,

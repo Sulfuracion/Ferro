@@ -76,9 +76,19 @@ fun RoutineEditorScreen(
     onBack: () -> Unit,
     onPickExercises: () -> Unit,
     modifier: Modifier = Modifier,
+    selectedExerciseIds: List<String>? = null,
+    onConsumeSelectedExerciseIds: () -> Unit = {},
     viewModel: RoutineEditorViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(selectedExerciseIds) {
+        val ids = selectedExerciseIds ?: return@LaunchedEffect
+        if (ids.isNotEmpty()) {
+            viewModel.onAddExercises(ids)
+        }
+        onConsumeSelectedExerciseIds()
+    }
 
     LaunchedEffect(uiState.isFinished) {
         if (uiState.isFinished) {

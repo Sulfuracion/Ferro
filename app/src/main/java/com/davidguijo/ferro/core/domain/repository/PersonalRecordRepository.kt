@@ -1,6 +1,7 @@
 package com.davidguijo.ferro.core.domain.repository
 
 import com.davidguijo.ferro.core.domain.BrokenRecord
+import com.davidguijo.ferro.core.domain.model.ExerciseRecordDetail
 import com.davidguijo.ferro.core.domain.model.PersonalRecord
 import com.davidguijo.ferro.core.domain.model.RecordType
 import com.davidguijo.ferro.core.domain.model.WorkoutWithExercises
@@ -9,7 +10,11 @@ import kotlinx.coroutines.flow.Flow
 interface PersonalRecordRepository {
     fun observeRecordsForExercise(exerciseId: String): Flow<List<PersonalRecord>>
 
+    fun observeRecordDetailsForExercise(exerciseId: String): Flow<List<ExerciseRecordDetail>>
+
     fun observeRecordsForWorkout(workoutId: String): Flow<List<PersonalRecord>>
+
+    fun observeRecordCountsByWorkout(): Flow<Map<String, Int>>
 
     suspend fun getLatestRecord(exerciseId: String, recordType: RecordType): PersonalRecord?
 

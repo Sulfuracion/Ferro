@@ -1,6 +1,7 @@
 package com.davidguijo.ferro.feature.workout
 
 import android.app.Application
+import androidx.lifecycle.SavedStateHandle
 import com.davidguijo.ferro.core.data.local.ExerciseDaoTest
 import com.davidguijo.ferro.core.data.local.FerroDatabase
 import com.davidguijo.ferro.core.data.local.createInMemoryFerroDatabase
@@ -36,12 +37,16 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.ZoneOffset
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -220,6 +225,58 @@ class ActiveWorkoutManagerTest {
             val savedRecords = personalRecordRepository.getRecordsForWorkout(started.workout.id)
             assertTrue(savedRecords.isNotEmpty())
             assertTrue(savedRecords.all { it.workoutSetId == firstSetId })
+        }
+
+    @Test
+    fun `ActiveWorkoutViewModel onExercisesSelected añade y reemplaza ejercicios y los persiste en Room`() =
+        runTest(UnconfinedTestDispatcher()) {
+            val testDispatcher = UnconfinedTestDispatcher(testScheduler)
+            Dispatchers.setMain(testDispatcher)
+            try {
+                seedSampleExercisesAndHistory()
+                val manager = createManager(backgroundScope)
+                val viewModel =
+                    ActiveWorkoutViewModel(
+                        initialRoutineId = null,
+                        savedStateHandle = SavedStateHandle(),
+                        activeWorkoutManager = manager,
+                        exerciseRepository = exerciseRepository,
+                        settingsRepository = settingsRepository,
+                        clock = clock,
+                        systemLanguageProvider = { "es" }
+                    )
+
+                viewModel.initializeIfNeeded("Entreno rápido")
+                manager.state.first { it.workout != null }
+
+                viewModel.onPrepareAddExercises()
+                viewModel.onExercisesSelected(listOf("ex-bench", "ex-row"))
+
+                val afterAdd =
+                    workoutRepository.observeActiveWorkout().first { workout ->
+                        workout?.exercises?.map { it.workoutExercise.exerciseId } == listOf("ex-bench", "ex-row")
+                    }
+                assertNotNull(afterAdd)
+                assertEquals(
+                    listOf("ex-bench", "ex-row"),
+                    afterAdd?.exercises?.map { it.workoutExercise.exerciseId }
+                )
+
+                val firstWorkoutExerciseId = afterAdd!!.exercises.first().workoutExercise.id
+                viewModel.onPrepareReplaceExercise(firstWorkoutExerciseId)
+                viewModel.onExercisesSelected(listOf("ex-incline"))
+
+                val afterReplace =
+                    workoutRepository.observeActiveWorkout().first { workout ->
+                        workout?.exercises?.map { it.workoutExercise.exerciseId } == listOf("ex-incline", "ex-row")
+                    }
+                assertEquals(
+                    listOf("ex-incline", "ex-row"),
+                    afterReplace?.exercises?.map { it.workoutExercise.exerciseId }
+                )
+            } finally {
+                Dispatchers.resetMain()
+            }
         }
 
     private fun createManager(scope: CoroutineScope): ActiveWorkoutManager = ActiveWorkoutManager(

@@ -38,6 +38,7 @@ import com.davidguijo.ferro.core.designsystem.component.EmptyState
 import com.davidguijo.ferro.core.designsystem.component.FerroButton
 import com.davidguijo.ferro.core.designsystem.component.FerroButtonVariant
 import com.davidguijo.ferro.core.designsystem.component.FerroCard
+import com.davidguijo.ferro.core.designsystem.component.FerroIconButton
 import com.davidguijo.ferro.core.designsystem.component.FerroPreviews
 import com.davidguijo.ferro.core.designsystem.theme.FerroTheme
 import kotlinx.serialization.Serializable
@@ -49,6 +50,8 @@ data object TrainRoute
 @Composable
 fun TrainScreen(
     onOpenActiveWorkout: () -> Unit,
+    onOpenHistory: () -> Unit,
+    onOpenCalendar: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TrainViewModel = hiltViewModel()
 ) {
@@ -69,6 +72,8 @@ fun TrainScreen(
         onResumeActiveWorkout = viewModel::onResumeActiveWorkout,
         onDiscardAndStartNew = viewModel::onDiscardAndStartPending,
         onDismissConflict = viewModel::onDismissConflictDialog,
+        onOpenHistory = onOpenHistory,
+        onOpenCalendar = onOpenCalendar,
         modifier = modifier
     )
 }
@@ -82,7 +87,9 @@ internal fun TrainContent(
     onResumeActiveWorkout: () -> Unit,
     onDiscardAndStartNew: () -> Unit,
     onDismissConflict: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onOpenHistory: () -> Unit = {},
+    onOpenCalendar: () -> Unit = {}
 ) {
     val colors = FerroTheme.colors
     val spacing = FerroTheme.spacing
@@ -98,6 +105,18 @@ internal fun TrainContent(
                         text = stringResource(R.string.train_title),
                         style = FerroTheme.typography.title,
                         color = colors.ink
+                    )
+                },
+                actions = {
+                    FerroIconButton(
+                        painter = painterResource(R.drawable.ic_calendar_month),
+                        contentDescription = stringResource(R.string.history_open_calendar_cd),
+                        onClick = onOpenCalendar
+                    )
+                    FerroIconButton(
+                        painter = painterResource(R.drawable.ic_timer),
+                        contentDescription = stringResource(R.string.history_open_history_cd),
+                        onClick = onOpenHistory
                     )
                 },
                 colors =
@@ -116,6 +135,12 @@ internal fun TrainContent(
                     .padding(horizontal = spacing.space4)
         ) {
             Spacer(modifier = Modifier.height(spacing.space2))
+            WeeklyStreakCard(
+                consecutiveWeeks = uiState.consecutiveWeeks,
+                workoutsThisWeek = uiState.workoutsThisWeek,
+                onClick = onOpenHistory
+            )
+            Spacer(modifier = Modifier.height(spacing.space4))
             FerroButton(
                 text = stringResource(R.string.train_start_empty),
                 onClick = onStartEmptyWorkout,
@@ -287,6 +312,66 @@ internal fun ActiveWorkoutConflictDialog(
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun WeeklyStreakCard(consecutiveWeeks: Int, workoutsThisWeek: Int, onClick: () -> Unit) {
+    val colors = FerroTheme.colors
+    val spacing = FerroTheme.spacing
+
+    FerroCard(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = onClick
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(spacing.space4),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = stringResource(R.string.train_streak_title).uppercase(),
+                    style = FerroTheme.typography.label,
+                    color = colors.inkMuted
+                )
+                Spacer(modifier = Modifier.height(spacing.space1))
+                Text(
+                    text = consecutiveWeeks.toString(),
+                    style = FerroTheme.typography.numberXl,
+                    color = if (consecutiveWeeks > 0) colors.brasaText else colors.ink
+                )
+                Text(
+                    text = pluralStringResource(R.plurals.train_streak_weeks, consecutiveWeeks, consecutiveWeeks),
+                    style = FerroTheme.typography.caption,
+                    color = colors.inkMuted
+                )
+            }
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = stringResource(R.string.train_streak_this_week_label).uppercase(),
+                    style = FerroTheme.typography.label,
+                    color = colors.inkMuted
+                )
+                Spacer(modifier = Modifier.height(spacing.space1))
+                Text(
+                    text = workoutsThisWeek.toString(),
+                    style = FerroTheme.typography.numberXl,
+                    color = colors.ink
+                )
+                Text(
+                    text = pluralStringResource(R.plurals.train_workouts_this_week, workoutsThisWeek, workoutsThisWeek),
+                    style = FerroTheme.typography.caption,
+                    color = colors.inkMuted
+                )
+            }
+            Icon(
+                painter = painterResource(R.drawable.ic_chevron_right),
+                contentDescription = stringResource(R.string.train_history_action),
+                tint = colors.inkMuted,
+                modifier = Modifier.size(FerroTheme.sizes.iconMd)
+            )
         }
     }
 }

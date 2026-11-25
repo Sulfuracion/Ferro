@@ -9,8 +9,59 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 internal interface PersonalRecordDao {
+    data class WorkoutRecordCountRow(val workoutId: String, val recordCount: Int)
+
+    data class PersonalRecordDetailRow(
+        val id: String,
+        val exerciseId: String,
+        val recordType: RecordType,
+        val value: Double,
+        val workoutSetId: String,
+        val achievedAt: Long,
+        val createdAt: Long,
+        val updatedAt: Long,
+        val weightKg: Double?,
+        val reps: Int?,
+        val durationS: Int?,
+        val distanceM: Double?
+    )
+
+    @Query(
+        """
+        SELECT we.workoutId AS workoutId, COUNT(pr.id) AS recordCount
+        FROM personal_records AS pr
+        INNER JOIN workout_sets AS ws ON ws.id = pr.workoutSetId
+        INNER JOIN workout_exercises AS we ON we.id = ws.workoutExerciseId
+        GROUP BY we.workoutId
+        """
+    )
+    fun observeRecordCountsByWorkout(): Flow<List<WorkoutRecordCountRow>>
+
     @Query("SELECT * FROM personal_records WHERE exerciseId = :exerciseId ORDER BY achievedAt DESC")
     fun observeRecordsForExercise(exerciseId: String): Flow<List<PersonalRecordEntity>>
+
+    @Query(
+        """
+        SELECT
+            pr.id AS id,
+            pr.exerciseId AS exerciseId,
+            pr.recordType AS recordType,
+            pr.value AS value,
+            pr.workoutSetId AS workoutSetId,
+            pr.achievedAt AS achievedAt,
+            pr.createdAt AS createdAt,
+            pr.updatedAt AS updatedAt,
+            ws.weightKg AS weightKg,
+            ws.reps AS reps,
+            ws.durationS AS durationS,
+            ws.distanceM AS distanceM
+        FROM personal_records AS pr
+        INNER JOIN workout_sets AS ws ON ws.id = pr.workoutSetId
+        WHERE pr.exerciseId = :exerciseId
+        ORDER BY pr.achievedAt DESC
+        """
+    )
+    fun observeRecordDetailsForExercise(exerciseId: String): Flow<List<PersonalRecordDetailRow>>
 
     @Query(
         """

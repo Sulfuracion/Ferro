@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -149,7 +150,9 @@ fun FerroNavHost(
                         navController.navigate(ActiveWorkoutRoute()) {
                             launchSingleTop = true
                         }
-                    }
+                    },
+                    onOpenHistory = { navController.navigate(HistoryRoute) },
+                    onOpenCalendar = { navController.navigate(CalendarRoute) }
                 )
             }
             composable<RoutinesRoute> {
@@ -179,8 +182,15 @@ fun FerroNavHost(
                     onOpenSettings = { navController.navigate(SettingsRoute) }
                 )
             }
-            composable<ActiveWorkoutRoute> {
+            composable<ActiveWorkoutRoute> { backStackEntry ->
+                val selectedExerciseIds by backStackEntry.savedStateHandle
+                    .getStateFlow<ArrayList<String>?>(ExerciseLibraryResult.SELECTED_EXERCISE_IDS_KEY, null)
+                    .collectAsStateWithLifecycle()
                 ActiveWorkoutScreen(
+                    selectedExerciseIds = selectedExerciseIds,
+                    onConsumeSelectedExerciseIds = {
+                        backStackEntry.savedStateHandle[ExerciseLibraryResult.SELECTED_EXERCISE_IDS_KEY] = null
+                    },
                     onMinimize = { navController.popBackStack() },
                     onOpenExerciseDetail = { exerciseId ->
                         navController.navigate(ExerciseDetailRoute(exerciseId))
@@ -208,8 +218,15 @@ fun FerroNavHost(
                     onBack = { navController.popBackStack() }
                 )
             }
-            composable<RoutineEditorRoute> {
+            composable<RoutineEditorRoute> { backStackEntry ->
+                val selectedExerciseIds by backStackEntry.savedStateHandle
+                    .getStateFlow<ArrayList<String>?>(ExerciseLibraryResult.SELECTED_EXERCISE_IDS_KEY, null)
+                    .collectAsStateWithLifecycle()
                 RoutineEditorScreen(
+                    selectedExerciseIds = selectedExerciseIds,
+                    onConsumeSelectedExerciseIds = {
+                        backStackEntry.savedStateHandle[ExerciseLibraryResult.SELECTED_EXERCISE_IDS_KEY] = null
+                    },
                     onBack = { navController.popBackStack() },
                     onPickExercises = {
                         navController.navigate(
@@ -237,22 +254,37 @@ fun FerroNavHost(
             }
             composable<ExerciseDetailRoute> {
                 ExerciseDetailScreen(
-                    onBack = { navController.popBackStack() }
+                    onBack = { navController.popBackStack() },
+                    onOpenSessionDetail = { workoutId ->
+                        navController.navigate(SessionDetailRoute(workoutId))
+                    }
                 )
             }
             composable<HistoryRoute> {
                 HistoryScreen(
-                    onBack = { navController.popBackStack() }
+                    onBack = { navController.popBackStack() },
+                    onOpenSessionDetail = { workoutId ->
+                        navController.navigate(SessionDetailRoute(workoutId))
+                    },
+                    onOpenCalendar = { navController.navigate(CalendarRoute) }
                 )
             }
             composable<SessionDetailRoute> {
                 SessionDetailScreen(
-                    onBack = { navController.popBackStack() }
+                    onBack = { navController.popBackStack() },
+                    onOpenActiveWorkout = {
+                        navController.navigate(ActiveWorkoutRoute()) {
+                            launchSingleTop = true
+                        }
+                    }
                 )
             }
             composable<CalendarRoute> {
                 CalendarScreen(
-                    onBack = { navController.popBackStack() }
+                    onBack = { navController.popBackStack() },
+                    onOpenSessionDetail = { workoutId ->
+                        navController.navigate(SessionDetailRoute(workoutId))
+                    }
                 )
             }
             composable<BodyMeasurementsRoute> {

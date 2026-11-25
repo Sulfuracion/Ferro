@@ -108,9 +108,10 @@ Todas las rutas son objetos o clases `@Serializable` bajo `com.davidguijo.ferro`
 - Recuperación por grupo muscular (días desde el último entreno de cada grupo).
 
 ### Medidas corporales
-- Peso, % de grasa, perímetros.
-- Fotos de progreso guardadas en el dispositivo.
-- Gráficas.
+- Peso (en `kg` en base de datos, mostrado en `kg`/`lb`), % de grasa y perímetros (en `cm` en base de datos, mostrados en `cm` o `in` si la unidad de peso es `lb`).
+- Fotos de progreso copiadas al almacenamiento privado (`filesDir/photos`), con pose (`frente`, `lado`, `espalda`), galería por fecha y comparador lado a lado.
+- Gráficas por medida con selector de rango.
+- **Volumen con peso corporal:** el peso corporal más reciente registrado se usa para calcular el volumen de los ejercicios de peso corporal lastrado (`(pesoCorporal + lastre) × reps`; si no hay peso corporal registrado, se usa solo `lastre × reps` cuando `lastre > 0`) y asistido (`max(0, pesoCorporal - asistencia) × reps`; sin peso corporal registrado no suma volumen).
 
 ### Ajustes
 - Idioma, unidades, tema, descanso por defecto, inicio de semana.

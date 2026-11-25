@@ -100,6 +100,8 @@ fun ActiveWorkoutScreen(
     onWorkoutFinished: (String) -> Unit,
     onWorkoutDiscarded: () -> Unit,
     modifier: Modifier = Modifier,
+    selectedExerciseIds: List<String>? = null,
+    onConsumeSelectedExerciseIds: () -> Unit = {},
     viewModel: ActiveWorkoutViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -120,6 +122,14 @@ fun ActiveWorkoutScreen(
 
     LaunchedEffect(defaultWorkoutName) {
         viewModel.initializeIfNeeded(defaultWorkoutName)
+    }
+
+    LaunchedEffect(selectedExerciseIds) {
+        val ids = selectedExerciseIds ?: return@LaunchedEffect
+        if (ids.isNotEmpty()) {
+            viewModel.onExercisesSelected(ids)
+        }
+        onConsumeSelectedExerciseIds()
     }
 
     LaunchedEffect(uiState.hasActiveWorkout) {

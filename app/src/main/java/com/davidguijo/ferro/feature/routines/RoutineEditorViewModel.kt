@@ -25,7 +25,6 @@ import com.davidguijo.ferro.core.domain.repository.RoutineRepository
 import com.davidguijo.ferro.core.domain.repository.SettingsRepository
 import com.davidguijo.ferro.core.domain.resolveIsSpanish
 import com.davidguijo.ferro.core.domain.ungroupSupersetGroup
-import com.davidguijo.ferro.feature.exercises.ExerciseLibraryResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.Clock
 import java.util.Locale
@@ -35,7 +34,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -93,7 +91,6 @@ data class RoutineEditorUiState(
 class RoutineEditorViewModel
 internal constructor(
     private val initialRoutineId: String?,
-    private val savedStateHandle: SavedStateHandle?,
     private val routineRepository: RoutineRepository,
     private val exerciseRepository: ExerciseRepository,
     private val settingsRepository: SettingsRepository,
@@ -109,7 +106,6 @@ internal constructor(
         clock: Clock
     ) : this(
         initialRoutineId = savedStateHandle.toRoute<RoutineEditorRoute>().routineId,
-        savedStateHandle = savedStateHandle,
         routineRepository = routineRepository,
         exerciseRepository = exerciseRepository,
         settingsRepository = settingsRepository,
@@ -204,20 +200,6 @@ internal constructor(
                     )
                 initialSnapshot.value = blankDraft.toSnapshot()
                 draftState.value = blankDraft
-            }
-        }
-
-        if (savedStateHandle != null) {
-            viewModelScope.launch {
-                savedStateHandle
-                    .getStateFlow<ArrayList<String>?>(ExerciseLibraryResult.SELECTED_EXERCISE_IDS_KEY, null)
-                    .filterNotNull()
-                    .collect { selectedIds ->
-                        if (selectedIds.isNotEmpty()) {
-                            onAddExercises(selectedIds)
-                        }
-                        savedStateHandle[ExerciseLibraryResult.SELECTED_EXERCISE_IDS_KEY] = null
-                    }
             }
         }
     }

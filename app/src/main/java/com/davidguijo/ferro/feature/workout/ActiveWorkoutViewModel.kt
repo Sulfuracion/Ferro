@@ -24,10 +24,10 @@ import com.davidguijo.ferro.core.domain.model.Settings
 import com.davidguijo.ferro.core.domain.model.TrackingType
 import com.davidguijo.ferro.core.domain.model.WorkoutSet
 import com.davidguijo.ferro.core.domain.model.WorkoutWithExercises
+import com.davidguijo.ferro.core.domain.repository.BodyMeasurementRepository
 import com.davidguijo.ferro.core.domain.repository.ExerciseRepository
 import com.davidguijo.ferro.core.domain.repository.SettingsRepository
 import com.davidguijo.ferro.core.domain.resolveIsSpanish
-import com.davidguijo.ferro.feature.exercises.ExerciseLibraryResult
 import com.davidguijo.ferro.feature.routines.formatDistanceMeters
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.text.DecimalFormat
@@ -42,10 +42,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
@@ -142,7 +142,8 @@ internal constructor(
     exerciseRepository: ExerciseRepository,
     settingsRepository: SettingsRepository,
     private val clock: Clock,
-    private val systemLanguageProvider: () -> String
+    private val systemLanguageProvider: () -> String,
+    bodyMeasurementRepository: BodyMeasurementRepository? = null
 ) : ViewModel() {
     @Inject
     constructor(
@@ -150,6 +151,7 @@ internal constructor(
         activeWorkoutManager: ActiveWorkoutManager,
         exerciseRepository: ExerciseRepository,
         settingsRepository: SettingsRepository,
+        bodyMeasurementRepository: BodyMeasurementRepository,
         clock: Clock
     ) : this(
         initialRoutineId = savedStateHandle.toRoute<ActiveWorkoutRoute>().routineId,
@@ -158,7 +160,8 @@ internal constructor(
         exerciseRepository = exerciseRepository,
         settingsRepository = settingsRepository,
         clock = clock,
-        systemLanguageProvider = { Locale.getDefault().language }
+        systemLanguageProvider = { Locale.getDefault().language },
+        bodyMeasurementRepository = bodyMeasurementRepository
     )
 
     private val setInputOverrides = MutableStateFlow<Map<String, SetInputStrings>>(emptyMap())
@@ -169,26 +172,20 @@ internal constructor(
     private var lastFormattingKey: Pair<WeightUnit, Boolean>? = null
     private var initializedEntry = false
 
-    init {
-        if (savedStateHandle != null) {
-            viewModelScope.launch {
-                savedStateHandle
-                    .getStateFlow<ArrayList<String>?>(ExerciseLibraryResult.SELECTED_EXERCISE_IDS_KEY, null)
-                    .filterNotNull()
-                    .collect { selectedIds ->
-                        val pendingReplaceId =
-                            savedStateHandle.get<String>(PENDING_REPLACE_WORKOUT_EXERCISE_ID_KEY)
-                        if (pendingReplaceId != null && selectedIds.isNotEmpty()) {
-                            activeWorkoutManager.replaceExercise(
-                                workoutExerciseId = pendingReplaceId,
-                                newExerciseId = selectedIds.first()
-                            )
-                            savedStateHandle[PENDING_REPLACE_WORKOUT_EXERCISE_ID_KEY] = null
-                        } else if (selectedIds.isNotEmpty()) {
-                            activeWorkoutManager.addExercises(selectedIds)
-                        }
-                        savedStateHandle[ExerciseLibraryResult.SELECTED_EXERCISE_IDS_KEY] = null
-                    }
+    fun onExercisesSelected(selectedIds: List<String>) {
+        if (selectedIds.isEmpty()) return
+        viewModelScope.launch {
+            activeWorkoutManager.restoreIfNeeded()
+            val pendingReplaceId =
+                savedStateHandle?.get<String>(PENDING_REPLACE_WORKOUT_EXERCISE_ID_KEY)
+            if (pendingReplaceId != null) {
+                activeWorkoutManager.replaceExercise(
+                    workoutExerciseId = pendingReplaceId,
+                    newExerciseId = selectedIds.first()
+                )
+                savedStateHandle[PENDING_REPLACE_WORKOUT_EXERCISE_ID_KEY] = null
+            } else {
+                activeWorkoutManager.addExercises(selectedIds)
             }
         }
     }
@@ -272,18 +269,27 @@ internal constructor(
                 initialValue = ActiveWorkoutClockUiState()
             )
 
+    private val latestBodyWeightFlow =
+        bodyMeasurementRepository?.observeLatestMeasurement()?.map { it?.weightKg } ?: flowOf(null)
+
     private val dataFlow =
         combine(
-            activeWorkoutManager.state,
-            exerciseRepository.observeAllExercises(),
-            settingsRepository.observeSettings(),
+            combine(
+                activeWorkoutManager.state,
+                exerciseRepository.observeAllExercises(),
+                settingsRepository.observeSettings(),
+                latestBodyWeightFlow
+            ) { session, allExercises, settings, bodyWeightKg ->
+                Triple(session, allExercises.associateBy { it.id }, settings to bodyWeightKg)
+            },
             setInputOverrides,
             rpeVisibleExerciseIds
-        ) { session, allExercises, settings, overrides, rpeVisible ->
+        ) { (session, exercisesById, settingsAndWeight), overrides, rpeVisible ->
             CombinedData(
                 session = session,
-                exercisesById = allExercises.associateBy { it.id },
-                settings = settings,
+                exercisesById = exercisesById,
+                settings = settingsAndWeight.first,
+                latestBodyWeightKg = settingsAndWeight.second,
                 inputOverrides = overrides,
                 rpeVisibleIds = rpeVisible
             )
@@ -324,7 +330,7 @@ internal constructor(
 
             val trackingTypesById =
                 data.exercisesById.mapValues { (_, ex) -> ex.trackingType }
-            val volumeKg = computeWorkoutVolumeKg(workout, trackingTypesById)
+            val volumeKg = computeWorkoutVolumeKg(workout, trackingTypesById, data.latestBodyWeightKg)
             val volumeText =
                 Units.formatWeight(
                     weightKg = volumeKg,
@@ -901,6 +907,7 @@ internal constructor(
         val session: ActiveWorkoutSessionState,
         val exercisesById: Map<String, Exercise>,
         val settings: Settings,
+        val latestBodyWeightKg: Double?,
         val inputOverrides: Map<String, SetInputStrings>,
         val rpeVisibleIds: Set<String>
     )

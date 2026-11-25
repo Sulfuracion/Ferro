@@ -55,31 +55,57 @@ enum class IncompleteSetsStrategy {
 }
 
 /**
- * Volumen total en kg del entreno activo o completado: suma `weightKg * reps`
+ * Volumen total en kg del entreno activo o completado: suma `pesoEfectivo * reps`
  * únicamente en series completadas que no sean de calentamiento y cuyo tipo de registro
- * utilice peso × reps (`WEIGHT_REPS` y `WEIGHTED_BODYWEIGHT`).
+ * utilice carga (`WEIGHT_REPS`, `WEIGHTED_BODYWEIGHT`, `ASSISTED_BODYWEIGHT`).
+ *
+ * - `WEIGHT_REPS`: `weightKg * reps` (si `weightKg > 0`).
+ * - `WEIGHTED_BODYWEIGHT`: si hay [bodyWeightKg] (> 0), `(bodyWeightKg + (weightKg ?: 0.0)) * reps`;
+ *   en caso contrario, `weightKg * reps` cuando `weightKg > 0`.
+ * - `ASSISTED_BODYWEIGHT`: si hay [bodyWeightKg] (> 0), `max(0.0, bodyWeightKg - (weightKg ?: 0.0)) * reps`.
  */
 fun computeWorkoutVolumeKg(
     workout: WorkoutWithExercises,
-    trackingTypesByExerciseId: Map<String, TrackingType> = emptyMap()
+    trackingTypesByExerciseId: Map<String, TrackingType> = emptyMap(),
+    bodyWeightKg: Double? = null
 ): Double {
+    val validBodyWeight = bodyWeightKg?.takeIf { it.isFinite() && it > 0.0 }
     var totalKg = 0.0
     for (exerciseWithSets in workout.exercises) {
         val trackingType =
             trackingTypesByExerciseId[exerciseWithSets.workoutExercise.exerciseId]
                 ?: TrackingType.WEIGHT_REPS
-        if (trackingType != TrackingType.WEIGHT_REPS &&
-            trackingType != TrackingType.WEIGHTED_BODYWEIGHT
-        ) {
-            continue
-        }
         for (set in exerciseWithSets.sets) {
             if (!set.completed || set.setType == SetType.WARMUP) continue
-            val weightKg = set.weightKg ?: continue
             val reps = set.reps ?: continue
-            if (weightKg > 0.0 && reps > 0) {
-                totalKg += weightKg * reps
-            }
+            if (reps <= 0) continue
+
+            val effectiveWeightKg =
+                when (trackingType) {
+                    TrackingType.WEIGHT_REPS -> set.weightKg?.takeIf { it > 0.0 }
+
+                    TrackingType.WEIGHTED_BODYWEIGHT ->
+                        if (validBodyWeight != null) {
+                            validBodyWeight + (set.weightKg?.coerceAtLeast(0.0) ?: 0.0)
+                        } else {
+                            set.weightKg?.takeIf { it > 0.0 }
+                        }
+
+                    TrackingType.ASSISTED_BODYWEIGHT ->
+                        if (validBodyWeight != null) {
+                            (validBodyWeight - (set.weightKg?.coerceAtLeast(0.0) ?: 0.0))
+                                .coerceAtLeast(0.0)
+                                .takeIf { it > 0.0 }
+                        } else {
+                            null
+                        }
+
+                    TrackingType.BODYWEIGHT_REPS,
+                    TrackingType.DURATION,
+                    TrackingType.DISTANCE_DURATION -> null
+                } ?: continue
+
+            totalKg += effectiveWeightKg * reps
         }
     }
     return totalKg
@@ -710,6 +736,181 @@ fun applyWorkoutValuesToRoutine(
 
     return RoutineWithExercises(
         routine = routine.routine.copy(updatedAt = nowMillis),
+        exercises = normalizedExercises
+    )
+}
+
+/**
+ * Crea un entreno en curso copiando la estructura (ejercicios, superseries, notas, descansos,
+ * tipos de serie y objetivos orientativos) de una sesión pasada [source].
+ */
+fun createWorkoutFromCompletedWorkout(
+    source: WorkoutWithExercises,
+    nowMillis: Long,
+    idGenerator: () -> String = { UUID.randomUUID().toString() }
+): WorkoutFromRoutineResult {
+    val workoutId = idGenerator()
+    val placeholders = linkedMapOf<String, SetTargetPlaceholder>()
+
+    val rawExercises =
+        source.exercises
+            .sortedBy { it.workoutExercise.position }
+            .mapIndexed { exerciseIndex, exerciseWithSets ->
+                val workoutExerciseId = idGenerator()
+                val sourceExercise = exerciseWithSets.workoutExercise
+                val workoutSets =
+                    exerciseWithSets.sets
+                        .sortedBy { it.position }
+                        .mapIndexed { setIndex, sourceSet ->
+                            val setId = idGenerator()
+                            val placeholder =
+                                SetTargetPlaceholder(
+                                    targetWeightKg = sourceSet.weightKg,
+                                    targetRepsMin = sourceSet.reps,
+                                    targetRepsMax = sourceSet.reps,
+                                    targetDurationS = sourceSet.durationS,
+                                    targetDistanceM = sourceSet.distanceM
+                                )
+                            if (placeholder.hasAnyTarget()) {
+                                placeholders[setId] = placeholder
+                            }
+                            WorkoutSet(
+                                id = setId,
+                                workoutExerciseId = workoutExerciseId,
+                                position = setIndex,
+                                setType = sourceSet.setType,
+                                weightKg = null,
+                                reps = null,
+                                rpe = null,
+                                durationS = null,
+                                distanceM = null,
+                                completed = false,
+                                completedAt = null,
+                                createdAt = nowMillis,
+                                updatedAt = nowMillis
+                            )
+                        }
+                WorkoutExerciseWithSets(
+                    workoutExercise =
+                        WorkoutExercise(
+                            id = workoutExerciseId,
+                            workoutId = workoutId,
+                            exerciseId = sourceExercise.exerciseId,
+                            position = exerciseIndex,
+                            supersetGroup = sourceExercise.supersetGroup,
+                            restSeconds = sourceExercise.restSeconds,
+                            notes = sourceExercise.notes,
+                            createdAt = nowMillis,
+                            updatedAt = nowMillis
+                        ),
+                    sets = workoutSets
+                )
+            }
+
+    val normalizedExercises = normalizeWorkoutExercises(rawExercises)
+    return WorkoutFromRoutineResult(
+        workout =
+            WorkoutWithExercises(
+                workout =
+                    Workout(
+                        id = workoutId,
+                        name = source.workout.name,
+                        routineId = source.workout.routineId,
+                        startedAt = nowMillis,
+                        endedAt = null,
+                        notes = source.workout.notes,
+                        status = WorkoutStatus.IN_PROGRESS,
+                        createdAt = nowMillis,
+                        updatedAt = nowMillis
+                    ),
+                exercises = normalizedExercises
+            ),
+        targetPlaceholdersBySetId = placeholders
+    )
+}
+
+/**
+ * Convierte una sesión pasada [source] en una rutina nueva lista para guardar, usando las series
+ * realizadas como series objetivo.
+ */
+fun createRoutineFromWorkout(
+    source: WorkoutWithExercises,
+    routineName: String,
+    nowMillis: Long,
+    position: Int = 0,
+    idGenerator: () -> String = { UUID.randomUUID().toString() }
+): RoutineWithExercises {
+    val routineId = idGenerator()
+    val rawExercises =
+        source.exercises
+            .sortedBy { it.workoutExercise.position }
+            .mapIndexed { exerciseIndex, exerciseWithSets ->
+                val routineExerciseId = idGenerator()
+                val sourceExercise = exerciseWithSets.workoutExercise
+                val setsToCopy =
+                    exerciseWithSets.sets
+                        .sortedBy { it.position }
+                        .filter { it.completed }
+                        .ifEmpty { exerciseWithSets.sets.sortedBy { it.position } }
+                val routineSets =
+                    setsToCopy.mapIndexed { setIndex, sourceSet ->
+                        RoutineSet(
+                            id = idGenerator(),
+                            routineExerciseId = routineExerciseId,
+                            position = setIndex,
+                            setType = sourceSet.setType,
+                            targetWeightKg = sourceSet.weightKg,
+                            targetRepsMin = sourceSet.reps,
+                            targetRepsMax = sourceSet.reps,
+                            targetDurationS = sourceSet.durationS,
+                            targetDistanceM = sourceSet.distanceM,
+                            createdAt = nowMillis,
+                            updatedAt = nowMillis
+                        )
+                    }
+                RoutineExerciseWithSets(
+                    routineExercise =
+                        RoutineExercise(
+                            id = routineExerciseId,
+                            routineId = routineId,
+                            exerciseId = sourceExercise.exerciseId,
+                            position = exerciseIndex,
+                            supersetGroup = sourceExercise.supersetGroup,
+                            restSeconds = sourceExercise.restSeconds,
+                            notes = sourceExercise.notes,
+                            createdAt = nowMillis,
+                            updatedAt = nowMillis
+                        ),
+                    sets = routineSets
+                )
+            }
+
+    val normalizedExercises =
+        normalizeSupersetGroups(
+            items = rawExercises,
+            getSupersetGroup = { it.routineExercise.supersetGroup },
+            updateItem = { item, pos, group ->
+                item.copy(
+                    routineExercise =
+                        item.routineExercise.copy(
+                            position = pos,
+                            supersetGroup = group
+                        )
+                )
+            }
+        )
+
+    return RoutineWithExercises(
+        routine =
+            com.davidguijo.ferro.core.domain.model.Routine(
+                id = routineId,
+                name = routineName.trim().ifEmpty { source.workout.name },
+                folderId = null,
+                notes = source.workout.notes,
+                position = position,
+                createdAt = nowMillis,
+                updatedAt = nowMillis
+            ),
         exercises = normalizedExercises
     )
 }

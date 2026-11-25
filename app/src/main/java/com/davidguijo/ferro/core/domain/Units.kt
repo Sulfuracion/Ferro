@@ -8,10 +8,16 @@ import kotlin.math.round
 /** Unidad de peso que el usuario ve. En la base de datos el peso siempre está en kg. */
 enum class WeightUnit { KG, LB }
 
-/** Conversión, formateo y parseo de unidades de peso. Funciones puras: kg es la unidad canónica. */
+/** Unidad de longitud para perímetros corporales. En la base de datos se guardan siempre en cm. */
+enum class LengthUnit { CM, IN }
+
+/** Conversión, formateo y parseo de unidades de peso y longitud. Funciones puras: kg y cm son las unidades canónicas. */
 object Units {
     /** Kilogramos por libra internacional (definición exacta). */
     const val KG_PER_LB: Double = 0.45359237
+
+    /** Centímetros por pulgada internacional (definición exacta). */
+    const val CM_PER_INCH: Double = 2.54
 
     const val DEFAULT_STEP_KG: Double = 0.5
     const val DEFAULT_STEP_LB: Double = 1.0
@@ -19,6 +25,16 @@ object Units {
     fun lbToKg(lb: Double): Double = lb * KG_PER_LB
 
     fun kgToLb(kg: Double): Double = kg / KG_PER_LB
+
+    fun inchesToCm(inches: Double): Double = inches * CM_PER_INCH
+
+    fun cmToInches(cm: Double): Double = cm / CM_PER_INCH
+
+    /** Unidad de longitud asociada a la unidad de peso elegida en ajustes (kg -> cm, lb -> in). */
+    fun lengthUnitFor(weightUnit: WeightUnit): LengthUnit = when (weightUnit) {
+        WeightUnit.KG -> LengthUnit.CM
+        WeightUnit.LB -> LengthUnit.IN
+    }
 
     /** Convierte un peso guardado (kg) a la unidad de visualización. */
     fun fromKg(kg: Double, unit: WeightUnit): Double = when (unit) {
@@ -30,6 +46,18 @@ object Units {
     fun toKg(value: Double, unit: WeightUnit): Double = when (unit) {
         WeightUnit.KG -> value
         WeightUnit.LB -> lbToKg(value)
+    }
+
+    /** Convierte una longitud guardada (cm) a la unidad de visualización. */
+    fun fromCm(cm: Double, unit: LengthUnit): Double = when (unit) {
+        LengthUnit.CM -> cm
+        LengthUnit.IN -> cmToInches(cm)
+    }
+
+    /** Convierte una longitud introducida en [unit] a cm para guardarla. */
+    fun toCm(value: Double, unit: LengthUnit): Double = when (unit) {
+        LengthUnit.CM -> value
+        LengthUnit.IN -> inchesToCm(value)
     }
 
     /** Paso de redondeo por defecto para mostrar pesos: 0,5 kg o 1 lb. */
@@ -97,4 +125,48 @@ object Units {
 
     /** Parsea [input] en la unidad [unit] y lo convierte a kg para guardarlo. */
     fun parseWeightToKg(input: String, unit: WeightUnit): Double? = parseWeightInput(input)?.let { toKg(it, unit) }
+
+    /**
+     * Formatea una longitud guardada en cm para mostrarla en [unit] con separador decimal según [locale].
+     */
+    fun formatLength(
+        lengthCm: Double,
+        unit: LengthUnit,
+        locale: Locale = Locale.getDefault(),
+        includeUnit: Boolean = false
+    ): String {
+        val converted = fromCm(lengthCm, unit)
+        val normalized = if (converted == 0.0) 0.0 else converted
+        val symbols = DecimalFormatSymbols.getInstance(locale)
+        val formatter =
+            DecimalFormat("0.##", symbols).apply {
+                isGroupingUsed = false
+            }
+        val numberText = formatter.format(normalized)
+        return if (includeUnit) {
+            val suffix =
+                when (unit) {
+                    LengthUnit.CM -> "cm"
+                    LengthUnit.IN -> "in"
+                }
+            "$numberText $suffix"
+        } else {
+            numberText
+        }
+    }
+
+    /** Parsea [input] en la unidad [unit] y lo convierte a cm para guardarlo. */
+    fun parseLengthToCm(input: String, unit: LengthUnit): Double? = parseWeightInput(input)?.let { toCm(it, unit) }
+
+    /** Formatea un porcentaje de grasa corporal con hasta 1 decimal según [locale]. */
+    fun formatBodyFat(bodyFatPct: Double, locale: Locale = Locale.getDefault(), includeUnit: Boolean = false): String {
+        val normalized = if (bodyFatPct == 0.0) 0.0 else bodyFatPct
+        val symbols = DecimalFormatSymbols.getInstance(locale)
+        val formatter =
+            DecimalFormat("0.#", symbols).apply {
+                isGroupingUsed = false
+            }
+        val numberText = formatter.format(normalized)
+        return if (includeUnit) "$numberText %" else numberText
+    }
 }
