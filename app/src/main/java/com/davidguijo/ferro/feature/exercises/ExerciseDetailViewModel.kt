@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
@@ -166,6 +167,8 @@ internal constructor(
                 bestRecords = ProgressCalculations.selectBestRecordsByType(stats.recordDetails, trackingType),
                 repMaxTable = stats.repMaxTable
             )
+        }.catch {
+            emit(ExerciseDetailUiState(isLoaded = true))
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -220,8 +223,11 @@ internal constructor(
                         },
                     updatedAt = clock.millis()
                 )
-            exerciseRepository.upsertExercise(updated)
-            editSheetVisible.value = false
+            runCatching {
+                exerciseRepository.upsertExercise(updated)
+            }.onSuccess {
+                editSheetVisible.value = false
+            }
         }
     }
 
@@ -236,8 +242,11 @@ internal constructor(
     fun onConfirmToggleArchive() {
         val current = uiState.value.exercise ?: return
         viewModelScope.launch {
-            exerciseRepository.setArchived(id = current.id, archived = !current.archived)
-            archiveDialogVisible.value = false
+            runCatching {
+                exerciseRepository.setArchived(id = current.id, archived = !current.archived)
+            }.onSuccess {
+                archiveDialogVisible.value = false
+            }
         }
     }
 }

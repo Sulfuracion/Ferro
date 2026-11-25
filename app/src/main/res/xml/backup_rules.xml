@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copia de seguridad automática para Android 8–11. -->
+<!-- Copia de seguridad automática de Android (API 26–30).
+     Incluye la base de datos Room (ferro.db), DataStore Preferences y las preferencias de idioma. -->
 <full-backup-content>
-    <include domain="database" path="." />
-    <include domain="sharedpref" path="." />
+    <include domain="database" path="ferro.db" />
     <include domain="file" path="datastore/" />
+    <include domain="sharedpref" path="." />
 </full-backup-content>

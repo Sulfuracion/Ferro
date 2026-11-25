@@ -19,6 +19,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -44,7 +45,8 @@ data class TrainUiState(
     val workoutsThisWeek: Int = 0,
     val activeWorkoutName: String? = null,
     val pendingConflict: TrainStartRequest? = null,
-    val shouldOpenActiveWorkout: Boolean = false
+    val shouldOpenActiveWorkout: Boolean = false,
+    val hasError: Boolean = false
 )
 
 @HiltViewModel
@@ -82,7 +84,7 @@ internal constructor(
 
     init {
         viewModelScope.launch {
-            activeWorkoutManager.restoreIfNeeded()
+            runCatching { activeWorkoutManager.restoreIfNeeded() }
         }
     }
 
@@ -123,8 +125,11 @@ internal constructor(
                 workoutsThisWeek = streak.workoutsThisWeek,
                 activeWorkoutName = activeSession.workout?.workout?.name,
                 pendingConflict = overlay.pendingConflict,
-                shouldOpenActiveWorkout = overlay.shouldOpenActiveWorkout
+                shouldOpenActiveWorkout = overlay.shouldOpenActiveWorkout,
+                hasError = overlay.hasError
             )
+        }.catch {
+            emit(TrainUiState(hasError = true))
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -151,12 +156,23 @@ internal constructor(
     fun onDiscardAndStartPending() {
         val request = localOverlay.value.pendingConflict ?: return
         viewModelScope.launch {
-            startWorkoutFromRequest(request)
-            localOverlay.update {
-                it.copy(
-                    pendingConflict = null,
-                    shouldOpenActiveWorkout = true
-                )
+            runCatching {
+                startWorkoutFromRequest(request)
+            }.onSuccess {
+                localOverlay.update {
+                    it.copy(
+                        pendingConflict = null,
+                        shouldOpenActiveWorkout = true,
+                        hasError = false
+                    )
+                }
+            }.onFailure {
+                localOverlay.update {
+                    it.copy(
+                        pendingConflict = null,
+                        hasError = true
+                    )
+                }
             }
         }
     }
@@ -165,18 +181,26 @@ internal constructor(
         localOverlay.update { it.copy(pendingConflict = null) }
     }
 
+    fun onDismissError() {
+        localOverlay.update { it.copy(hasError = false) }
+    }
+
     fun onNavigatedToActiveWorkout() {
         localOverlay.update { it.copy(shouldOpenActiveWorkout = false) }
     }
 
     private fun handleStartRequest(request: TrainStartRequest) {
         viewModelScope.launch {
-            activeWorkoutManager.restoreIfNeeded()
-            if (activeWorkoutManager.hasActiveWorkout()) {
-                localOverlay.update { it.copy(pendingConflict = request) }
-            } else {
-                startWorkoutFromRequest(request)
-                localOverlay.update { it.copy(shouldOpenActiveWorkout = true) }
+            runCatching {
+                activeWorkoutManager.restoreIfNeeded()
+                if (activeWorkoutManager.hasActiveWorkout()) {
+                    localOverlay.update { it.copy(pendingConflict = request, hasError = false) }
+                } else {
+                    startWorkoutFromRequest(request)
+                    localOverlay.update { it.copy(shouldOpenActiveWorkout = true, hasError = false) }
+                }
+            }.onFailure {
+                localOverlay.update { it.copy(hasError = true) }
             }
         }
     }
@@ -204,7 +228,8 @@ internal constructor(
 
     private data class LocalOverlay(
         val pendingConflict: TrainStartRequest? = null,
-        val shouldOpenActiveWorkout: Boolean = false
+        val shouldOpenActiveWorkout: Boolean = false,
+        val hasError: Boolean = false
     )
 
     private data class TrainDataBundle(

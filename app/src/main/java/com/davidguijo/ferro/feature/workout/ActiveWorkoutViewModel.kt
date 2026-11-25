@@ -1,5 +1,6 @@
 package com.davidguijo.ferro.feature.workout
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -41,6 +42,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
@@ -59,6 +61,7 @@ data class SetInputStrings(
     val distanceInput: String = ""
 )
 
+@Immutable
 data class ActiveSetUi(
     val id: String,
     val setType: SetType,
@@ -78,6 +81,7 @@ data class ActiveSetUi(
     val completed: Boolean
 )
 
+@Immutable
 data class ActiveExerciseUi(
     val workoutExerciseId: String,
     val exerciseId: String,
@@ -95,14 +99,19 @@ data class ActiveExerciseUi(
     val sets: List<ActiveSetUi>
 )
 
+@Immutable
 data class ActiveRestTimerUi(val remainingSeconds: Int, val remainingText: String, val progress: Float)
 
+@Immutable
 data class ActiveWorkoutClockUiState(val elapsedText: String = "00:00", val restTimer: ActiveRestTimerUi? = null)
 
+@Immutable
 data class ActiveSetTypePickerTarget(val workoutExerciseId: String, val setId: String, val currentType: SetType)
 
+@Immutable
 data class ActiveRpePickerTarget(val workoutExerciseId: String, val setId: String, val currentRpe: Double?)
 
+@Immutable
 data class ActiveWorkoutUiState(
     val isReady: Boolean = false,
     val hasActiveWorkout: Boolean = false,
@@ -263,6 +272,8 @@ internal constructor(
                         delay(1_000L)
                     }
                 }
+            }.catch {
+                emit(ActiveWorkoutClockUiState())
             }.stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
@@ -381,6 +392,8 @@ internal constructor(
                 completedWorkoutIdForSummary = uiOverlay.completedWorkoutIdForSummary,
                 shouldNavigateBackAfterDiscard = uiOverlay.shouldNavigateBackAfterDiscard
             )
+        }.catch {
+            emit(ActiveWorkoutUiState())
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),

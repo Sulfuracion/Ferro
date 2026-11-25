@@ -39,6 +39,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
@@ -320,6 +321,8 @@ internal constructor(
                 canUpdateRoutineValues = canUpdateRoutine,
                 routineUpdated = wasUpdated
             )
+        }.catch {
+            emit(WorkoutSummaryUiState(workoutId = workoutId, isLoaded = true))
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -328,19 +331,21 @@ internal constructor(
 
     fun onUpdateRoutineWithWorkoutValues() {
         viewModelScope.launch {
-            val workout = workoutRepository.getWorkoutWithExercises(workoutId) ?: return@launch
-            val routineId = workout.workout.routineId ?: return@launch
-            val routine = routineRepository.getRoutineWithExercises(routineId) ?: return@launch
-            if (!hasWorkoutRoutineValuesChanged(workout, routine)) return@launch
+            runCatching {
+                val workout = workoutRepository.getWorkoutWithExercises(workoutId) ?: return@launch
+                val routineId = workout.workout.routineId ?: return@launch
+                val routine = routineRepository.getRoutineWithExercises(routineId) ?: return@launch
+                if (!hasWorkoutRoutineValuesChanged(workout, routine)) return@launch
 
-            val updatedRoutine =
-                applyWorkoutValuesToRoutine(
-                    routine = routine,
-                    workout = workout,
-                    nowMillis = clock.millis()
-                )
-            routineRepository.saveRoutineWithExercises(updatedRoutine)
-            routineUpdatedFlag.value = true
+                val updatedRoutine =
+                    applyWorkoutValuesToRoutine(
+                        routine = routine,
+                        workout = workout,
+                        nowMillis = clock.millis()
+                    )
+                routineRepository.saveRoutineWithExercises(updatedRoutine)
+                routineUpdatedFlag.value = true
+            }
         }
     }
 

@@ -53,6 +53,7 @@ import com.davidguijo.ferro.core.designsystem.component.FerroChip
 import com.davidguijo.ferro.core.designsystem.component.FerroDivider
 import com.davidguijo.ferro.core.designsystem.component.FerroIconButton
 import com.davidguijo.ferro.core.designsystem.component.FerroLineChart
+import com.davidguijo.ferro.core.designsystem.component.FerroLoadingState
 import com.davidguijo.ferro.core.designsystem.component.FerroSetType
 import com.davidguijo.ferro.core.designsystem.component.SetTypeBadge
 import com.davidguijo.ferro.core.designsystem.theme.FerroTheme
@@ -169,7 +170,11 @@ internal fun ExerciseDetailContent(
             )
         }
     ) { innerPadding ->
-        if (uiState.isLoaded && exercise == null) {
+        if (!uiState.isLoaded) {
+            FerroLoadingState(modifier = Modifier.padding(innerPadding))
+            return@Scaffold
+        }
+        if (exercise == null) {
             Box(
                 modifier =
                     Modifier
@@ -580,7 +585,7 @@ private fun ExerciseChartsTab(
         verticalArrangement = Arrangement.spacedBy(spacing.space4)
     ) {
         LazyRow(horizontalArrangement = Arrangement.spacedBy(spacing.space2)) {
-            items(ExerciseChartMetric.entries) { metric ->
+            items(ExerciseChartMetric.entries, key = { it.name }) { metric ->
                 FerroChip(
                     label = stringResource(metric.labelRes()),
                     selected = metric == selectedMetric,
@@ -590,7 +595,7 @@ private fun ExerciseChartsTab(
         }
 
         LazyRow(horizontalArrangement = Arrangement.spacedBy(spacing.space2)) {
-            items(ProgressTimeRange.entries) { range ->
+            items(ProgressTimeRange.entries, key = { it.name }) { range ->
                 FerroChip(
                     label = stringResource(range.labelRes()),
                     selected = range == selectedRange,

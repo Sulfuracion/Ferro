@@ -29,19 +29,26 @@ class MainActivity : AppCompatActivity() {
     lateinit var activeWorkoutManager: ActiveWorkoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+        splashScreen.setKeepOnScreenCondition {
+            viewModel.onboardingCompleted.value == null
+        }
         enableEdgeToEdge()
         handleOpenWorkoutIntent(intent)
         setContent {
             val themeMode by viewModel.themeMode.collectAsStateWithLifecycle()
+            val onboardingCompleted by viewModel.onboardingCompleted.collectAsStateWithLifecycle()
             val miniBarState by viewModel.miniBarState.collectAsStateWithLifecycle()
             val openActiveWorkoutSignal by viewModel.openActiveWorkoutSignal.collectAsStateWithLifecycle()
             FerroTheme(themeMode = themeMode) {
-                FerroNavHost(
-                    miniBarState = miniBarState,
-                    openActiveWorkoutSignal = openActiveWorkoutSignal
-                )
+                if (onboardingCompleted != null) {
+                    FerroNavHost(
+                        startWithOnboarding = onboardingCompleted == false,
+                        miniBarState = miniBarState,
+                        openActiveWorkoutSignal = openActiveWorkoutSignal
+                    )
+                }
             }
         }
     }

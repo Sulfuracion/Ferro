@@ -21,6 +21,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -102,6 +103,8 @@ internal constructor(
                 selectedIds = currentSelected,
                 isCreateSheetVisible = sheetVisible
             )
+        }.catch {
+            emit(ExerciseLibraryUiState(selectionMode = selectionMode))
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -164,8 +167,11 @@ internal constructor(
                     createdAt = now,
                     updatedAt = now
                 )
-            exerciseRepository.upsertExercise(exercise)
-            createSheetVisible.value = false
+            runCatching {
+                exerciseRepository.upsertExercise(exercise)
+            }.onSuccess {
+                createSheetVisible.value = false
+            }
         }
     }
 

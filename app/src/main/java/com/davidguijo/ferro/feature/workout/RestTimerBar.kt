@@ -1,6 +1,5 @@
 package com.davidguijo.ferro.feature.workout
 
-import android.provider.Settings as AndroidSettings
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
@@ -38,13 +37,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.davidguijo.ferro.R
 import com.davidguijo.ferro.core.designsystem.component.FerroButton
 import com.davidguijo.ferro.core.designsystem.component.FerroButtonVariant
 import com.davidguijo.ferro.core.designsystem.component.FerroPreviews
+import com.davidguijo.ferro.core.designsystem.theme.FerroHaptics
+import com.davidguijo.ferro.core.designsystem.theme.FerroMotion
 import com.davidguijo.ferro.core.designsystem.theme.FerroTheme
 import kotlinx.coroutines.delay
 
@@ -62,17 +64,9 @@ fun RestTimerBar(
     onSkip: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
-    val reduceMotion =
-        remember(context) {
-            runCatching {
-                AndroidSettings.Global.getFloat(
-                    context.contentResolver,
-                    AndroidSettings.Global.ANIMATOR_DURATION_SCALE,
-                    1f
-                ) == 0f
-            }.getOrDefault(false)
-        }
+    val reduceMotion = FerroTheme.reduceMotion
+    val haptic = LocalHapticFeedback.current
+    val view = LocalView.current
 
     var isFlashingCompletion by remember { mutableStateOf(false) }
     var lastSeenCompletedId by remember { mutableLongStateOf(completedRestEventId) }
@@ -80,6 +74,7 @@ fun RestTimerBar(
     LaunchedEffect(completedRestEventId) {
         if (completedRestEventId > lastSeenCompletedId) {
             lastSeenCompletedId = completedRestEventId
+            FerroHaptics.confirm(view, haptic)
             isFlashingCompletion = true
             delay(COMPLETION_FLASH_DURATION_MS)
             isFlashingCompletion = false
@@ -102,15 +97,15 @@ fun RestTimerBar(
         visible = isVisible && displayedTimer != null,
         enter =
             if (reduceMotion) {
-                fadeIn(tween(ANIM_DURATION_MS))
+                fadeIn(FerroMotion.stateSpec())
             } else {
-                fadeIn(tween(ANIM_DURATION_MS)) + slideInVertically(tween(ANIM_DURATION_MS)) { it / 2 }
+                fadeIn(FerroMotion.stateSpec()) + slideInVertically(FerroMotion.stateSpec()) { it / 2 }
             },
         exit =
             if (reduceMotion) {
-                fadeOut(tween(ANIM_DURATION_MS))
+                fadeOut(FerroMotion.stateSpec())
             } else {
-                fadeOut(tween(ANIM_DURATION_MS)) + slideOutVertically(tween(ANIM_DURATION_MS)) { it / 2 }
+                fadeOut(FerroMotion.stateSpec()) + slideOutVertically(FerroMotion.stateSpec()) { it / 2 }
             },
         modifier = modifier
     ) {

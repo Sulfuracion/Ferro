@@ -5,6 +5,7 @@ import androidx.room3.DaoReturnTypeConverters
 import androidx.room3.Database
 import androidx.room3.RoomDatabase
 import androidx.room3.paging.PagingSourceDaoReturnTypeConverter
+import com.davidguijo.ferro.core.data.local.dao.BackupDao
 import com.davidguijo.ferro.core.data.local.dao.BodyMeasurementDao
 import com.davidguijo.ferro.core.data.local.dao.ExerciseDao
 import com.davidguijo.ferro.core.data.local.dao.PersonalRecordDao
@@ -51,6 +52,8 @@ abstract class FerroDatabase : RoomDatabase() {
     internal abstract fun personalRecordDao(): PersonalRecordDao
 
     internal abstract fun bodyMeasurementDao(): BodyMeasurementDao
+
+    internal abstract fun backupDao(): BackupDao
 
     companion object {
         const val DATABASE_NAME: String = "ferro.db"

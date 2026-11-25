@@ -36,7 +36,9 @@ import androidx.paging.compose.itemKey
 import com.davidguijo.ferro.R
 import com.davidguijo.ferro.core.designsystem.component.EmptyState
 import com.davidguijo.ferro.core.designsystem.component.FerroCard
+import com.davidguijo.ferro.core.designsystem.component.FerroErrorState
 import com.davidguijo.ferro.core.designsystem.component.FerroIconButton
+import com.davidguijo.ferro.core.designsystem.component.FerroLoadingState
 import com.davidguijo.ferro.core.designsystem.theme.FerroTheme
 
 @Composable
@@ -106,15 +108,15 @@ internal fun HistoryContent(
         val refreshState = pagedItems.loadState.refresh
         when {
             refreshState is LoadState.Loading && pagedItems.itemCount == 0 -> {
-                Box(
-                    modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(color = colors.brasa)
-                }
+                FerroLoadingState(modifier = Modifier.padding(innerPadding))
+            }
+
+            refreshState is LoadState.Error && pagedItems.itemCount == 0 -> {
+                FerroErrorState(
+                    message = stringResource(R.string.error_generic_load),
+                    onRetry = { pagedItems.retry() },
+                    modifier = Modifier.padding(innerPadding)
+                )
             }
 
             refreshState is LoadState.NotLoading && pagedItems.itemCount == 0 -> {

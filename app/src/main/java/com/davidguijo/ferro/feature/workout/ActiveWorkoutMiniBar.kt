@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.davidguijo.ferro.R
 import com.davidguijo.ferro.core.designsystem.component.FerroDivider
 import com.davidguijo.ferro.core.designsystem.component.FerroPreviews
+import com.davidguijo.ferro.core.designsystem.theme.FerroMotion
 import com.davidguijo.ferro.core.designsystem.theme.FerroTheme
 
 data class ActiveWorkoutMiniBarUiState(
@@ -54,8 +55,8 @@ fun ActiveWorkoutMiniBar(
 ) {
     AnimatedVisibility(
         visible = visible,
-        enter = fadeIn(),
-        exit = fadeOut(),
+        enter = fadeIn(FerroMotion.stateSpec()),
+        exit = fadeOut(FerroMotion.stateSpec()),
         modifier = modifier
     ) {
         val colors = FerroTheme.colors

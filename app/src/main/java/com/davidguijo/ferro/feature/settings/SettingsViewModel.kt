@@ -13,6 +13,7 @@ import java.time.DayOfWeek
 import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -31,6 +32,7 @@ class SettingsViewModel @Inject constructor(
         settingsRepository
             .observeSettings()
             .map { SettingsUiState(settings = it) }
+            .catch { emit(SettingsUiState()) }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
@@ -47,30 +49,34 @@ class SettingsViewModel @Inject constructor(
      */
     fun syncSystemLocale() {
         viewModelScope.launch {
-            val systemAppLanguage = appLocaleController.getCurrentLanguage()
-            val storedLanguage = settingsRepository.observeSettings().first().language
-            if (systemAppLanguage != storedLanguage) {
-                settingsRepository.setLanguage(systemAppLanguage)
+            runCatching {
+                val systemAppLanguage = appLocaleController.getCurrentLanguage()
+                val storedLanguage = settingsRepository.observeSettings().first().language
+                if (systemAppLanguage != storedLanguage) {
+                    settingsRepository.setLanguage(systemAppLanguage)
+                }
             }
         }
     }
 
     fun onLanguageSelected(language: AppLanguage) {
         viewModelScope.launch {
-            settingsRepository.setLanguage(language)
-            appLocaleController.setLanguage(language)
+            runCatching {
+                settingsRepository.setLanguage(language)
+                appLocaleController.setLanguage(language)
+            }
         }
     }
 
     fun onWeightUnitSelected(unit: WeightUnit) {
         viewModelScope.launch {
-            settingsRepository.setWeightUnit(unit)
+            runCatching { settingsRepository.setWeightUnit(unit) }
         }
     }
 
     fun onThemeModeSelected(mode: ThemeMode) {
         viewModelScope.launch {
-            settingsRepository.setThemeMode(mode)
+            runCatching { settingsRepository.setThemeMode(mode) }
         }
     }
 
@@ -79,7 +85,7 @@ class SettingsViewModel @Inject constructor(
         val next = (current - REST_STEP_SECONDS).coerceAtLeast(Settings.MIN_REST_SECONDS)
         if (next != current) {
             viewModelScope.launch {
-                settingsRepository.setDefaultRestSeconds(next)
+                runCatching { settingsRepository.setDefaultRestSeconds(next) }
             }
         }
     }
@@ -89,26 +95,26 @@ class SettingsViewModel @Inject constructor(
         val next = (current + REST_STEP_SECONDS).coerceAtMost(Settings.MAX_REST_SECONDS)
         if (next != current) {
             viewModelScope.launch {
-                settingsRepository.setDefaultRestSeconds(next)
+                runCatching { settingsRepository.setDefaultRestSeconds(next) }
             }
         }
     }
 
     fun onFirstDayOfWeekSelected(dayOfWeek: DayOfWeek) {
         viewModelScope.launch {
-            settingsRepository.setFirstDayOfWeek(dayOfWeek)
+            runCatching { settingsRepository.setFirstDayOfWeek(dayOfWeek) }
         }
     }
 
     fun onTimerSoundChanged(enabled: Boolean) {
         viewModelScope.launch {
-            settingsRepository.setTimerSoundEnabled(enabled)
+            runCatching { settingsRepository.setTimerSoundEnabled(enabled) }
         }
     }
 
     fun onTimerVibrationChanged(enabled: Boolean) {
         viewModelScope.launch {
-            settingsRepository.setTimerVibrationEnabled(enabled)
+            runCatching { settingsRepository.setTimerVibrationEnabled(enabled) }
         }
     }
 

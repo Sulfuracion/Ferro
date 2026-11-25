@@ -1,9 +1,6 @@
 package com.davidguijo.ferro.feature.workout
 
-import android.provider.Settings as AndroidSettings
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -40,16 +37,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.view.HapticFeedbackConstantsCompat
-import androidx.core.view.ViewCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.davidguijo.ferro.R
@@ -59,7 +54,10 @@ import com.davidguijo.ferro.core.designsystem.component.FerroButtonVariant
 import com.davidguijo.ferro.core.designsystem.component.FerroCard
 import com.davidguijo.ferro.core.designsystem.component.FerroDivider
 import com.davidguijo.ferro.core.designsystem.component.FerroIconButton
+import com.davidguijo.ferro.core.designsystem.component.FerroLoadingState
 import com.davidguijo.ferro.core.designsystem.component.SetTypeBadge
+import com.davidguijo.ferro.core.designsystem.theme.FerroHaptics
+import com.davidguijo.ferro.core.designsystem.theme.FerroMotion
 import com.davidguijo.ferro.core.designsystem.theme.FerroTheme
 import com.davidguijo.ferro.core.domain.Records
 import com.davidguijo.ferro.core.domain.Units
@@ -108,19 +106,9 @@ internal fun WorkoutSummaryContent(
     val colors = FerroTheme.colors
     val spacing = FerroTheme.spacing
     val view = LocalView.current
-    val context = LocalContext.current
+    val haptic = LocalHapticFeedback.current
     val density = LocalDensity.current
-
-    val reduceMotion =
-        remember(context) {
-            runCatching {
-                AndroidSettings.Global.getFloat(
-                    context.contentResolver,
-                    AndroidSettings.Global.ANIMATOR_DURATION_SCALE,
-                    1f
-                ) == 0f
-            }.getOrDefault(false)
-        }
+    val reduceMotion = FerroTheme.reduceMotion
 
     var hasCelebratedRecords by rememberSaveable(uiState.workoutId) { mutableStateOf(false) }
     val recordCelebrationProgress = remember { Animatable(0f) }
@@ -129,16 +117,12 @@ internal fun WorkoutSummaryContent(
         if (uiState.isLoaded && uiState.brokenRecords.isNotEmpty()) {
             if (!hasCelebratedRecords) {
                 hasCelebratedRecords = true
-                ViewCompat.performHapticFeedback(view, HapticFeedbackConstantsCompat.CONFIRM)
+                FerroHaptics.confirm(view, haptic)
                 recordCelebrationProgress.snapTo(0f)
                 launch {
                     recordCelebrationProgress.animateTo(
                         targetValue = 1f,
-                        animationSpec =
-                            tween(
-                                durationMillis = PR_CELEBRATION_ANIM_MS,
-                                easing = FastOutSlowInEasing
-                            )
+                        animationSpec = FerroMotion.stateSpec()
                     )
                 }
             } else {
@@ -203,7 +187,11 @@ internal fun WorkoutSummaryContent(
             }
         }
     ) { innerPadding ->
-        if (uiState.isLoaded && uiState.workoutName.isEmpty()) {
+        if (!uiState.isLoaded) {
+            FerroLoadingState(modifier = Modifier.padding(innerPadding))
+            return@Scaffold
+        }
+        if (uiState.workoutName.isEmpty()) {
             Box(
                 modifier =
                     Modifier

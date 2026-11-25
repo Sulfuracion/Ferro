@@ -39,6 +39,8 @@ import com.davidguijo.ferro.core.designsystem.component.FerroCard
 import com.davidguijo.ferro.core.designsystem.component.FerroChartEntry
 import com.davidguijo.ferro.core.designsystem.component.FerroColumnChart
 import com.davidguijo.ferro.core.designsystem.component.FerroDivider
+import com.davidguijo.ferro.core.designsystem.component.FerroErrorState
+import com.davidguijo.ferro.core.designsystem.component.FerroLoadingState
 import com.davidguijo.ferro.core.designsystem.theme.FerroTheme
 import com.davidguijo.ferro.core.domain.Units
 import com.davidguijo.ferro.core.domain.WeightUnit
@@ -88,7 +90,18 @@ internal fun ProgressContent(uiState: ProgressUiState, modifier: Modifier = Modi
             )
         }
     ) { innerPadding ->
-        if (!uiState.isLoaded) return@Scaffold
+        if (!uiState.isLoaded) {
+            FerroLoadingState(modifier = Modifier.padding(innerPadding))
+            return@Scaffold
+        }
+
+        if (uiState.hasError) {
+            FerroErrorState(
+                message = stringResource(R.string.error_generic_load),
+                modifier = Modifier.padding(innerPadding)
+            )
+            return@Scaffold
+        }
 
         if (!uiState.hasAnyData) {
             Box(

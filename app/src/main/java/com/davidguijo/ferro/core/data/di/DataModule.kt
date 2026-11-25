@@ -9,6 +9,7 @@ import androidx.room3.Room
 import androidx.sqlite.driver.AndroidSQLiteDriver
 import com.davidguijo.ferro.core.data.local.FerroDatabase
 import com.davidguijo.ferro.core.data.local.FerroDatabaseMigrations
+import com.davidguijo.ferro.core.data.local.dao.BackupDao
 import com.davidguijo.ferro.core.data.local.dao.BodyMeasurementDao
 import com.davidguijo.ferro.core.data.local.dao.ExerciseDao
 import com.davidguijo.ferro.core.data.local.dao.PersonalRecordDao
@@ -60,6 +61,9 @@ object DataModule {
 
     @Provides
     internal fun provideBodyMeasurementDao(database: FerroDatabase): BodyMeasurementDao = database.bodyMeasurementDao()
+
+    @Provides
+    internal fun provideBackupDao(database: FerroDatabase): BackupDao = database.backupDao()
 
     /** DataStore de preferencias de usuario (ajustes). Solo lo usan los repositorios de core.data. */
     @Provides

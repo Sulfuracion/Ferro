@@ -475,11 +475,46 @@
     <string name="body_photos_import_error">Couldn\'t save photo. Please try again.</string>
 
     <string name="backup_title">Backup</string>
-    <string name="backup_empty_title">Export and import your data</string>
-    <string name="backup_empty_description">Save a JSON backup or export your workouts to CSV.</string>
+    <string name="backup_last_section">Status</string>
+    <string name="backup_last_date_label">Last JSON backup</string>
+    <string name="backup_last_never">Never</string>
+    <string name="backup_stale_warning">Your last backup is over 30 days old. Export a JSON file to keep your data safe.</string>
+    <string name="backup_never_warning">You haven\'t exported a backup yet. Save a JSON file to Drive or your device.</string>
+    <string name="backup_photos_notice">Progress photos are not included in this version.</string>
+    <string name="backup_section_json">Full backup (JSON)</string>
+    <string name="backup_json_description">Includes workouts, routines, custom exercises, PRs, measurements and settings.</string>
+    <string name="backup_export_json_action">Export JSON backup</string>
+    <string name="backup_import_json_action">Import JSON backup</string>
+    <string name="backup_section_csv">Spreadsheet (CSV)</string>
+    <string name="backup_csv_description">All completed sets (date, workout, exercise, set type, weight in %1$s, reps, RPE, duration, distance and notes).</string>
+    <string name="backup_export_csv_action">Export sets to CSV</string>
+    <string name="backup_preview_title">Backup preview</string>
+    <string name="backup_preview_meta_format">Schema v%1$d · App %2$s · %3$s</string>
+    <string name="backup_preview_migrated_badge">Will migrate from schema v%1$d to v%2$d</string>
+    <string name="backup_preview_workouts_label">Workouts</string>
+    <string name="backup_preview_routines_label">Routines</string>
+    <string name="backup_preview_exercises_label">Exercises</string>
+    <string name="backup_preview_measurements_label">Measurements</string>
+    <string name="backup_import_mode_label">Import mode</string>
+    <string name="backup_import_mode_merge_title">Merge by ID</string>
+    <string name="backup_import_mode_merge_desc">Keep your current data and update or add records from the file.</string>
+    <string name="backup_import_mode_replace_title">Replace all</string>
+    <string name="backup_import_mode_replace_desc">Clear current data before importing the file.</string>
+    <string name="backup_import_safety_note">An automatic copy of your current data is saved in the app\'s internal storage before importing.</string>
+    <string name="backup_import_confirm_action">Import now</string>
+    <string name="backup_status_export_json_ok">JSON backup saved.</string>
+    <string name="backup_status_export_csv_ok">CSV file exported.</string>
+    <string name="backup_status_import_ok">Data imported. Safety copy saved (%1$s).</string>
+    <string name="backup_error_corrupted">The file is not a valid Ferro JSON backup or is corrupted.</string>
+    <string name="backup_error_future_schema">This backup was created with a newer version of Ferro. Update the app before importing.</string>
+    <string name="backup_error_io">Couldn\'t read or save the file. Your data is still here; try again.</string>
 
     <!-- Profile -->
     <string name="profile_title">Profile</string>
+    <string name="profile_backup_reminder_title">Backup recommended</string>
+    <string name="profile_backup_reminder_never">You haven\'t saved a backup outside this phone yet.</string>
+    <string name="profile_backup_reminder_stale">Your last backup is over 30 days old (%1$d d).</string>
+    <string name="profile_backup_reminder_action">Back up</string>
     <string name="profile_section_data">Data</string>
     <string name="profile_exercises_title">Exercise library</string>
     <string name="profile_exercises_subtitle">Browse or create exercises</string>
@@ -584,4 +619,42 @@
         <item quantity="one">%1$d day ago</item>
         <item quantity="other">%1$d days ago</item>
     </plurals>
+
+    <!-- Onboarding -->
+    <string name="onboarding_step_indicator">Step %1$d of %2$d</string>
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_back">Back</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_finish">Start</string>
+    <string name="onboarding_language_title">Choose your language</string>
+    <string name="onboarding_language_subtitle">You can change this anytime in Settings.</string>
+    <string name="onboarding_unit_title">Weight unit</string>
+    <string name="onboarding_unit_subtitle">All weights are stored in kg and converted for display.</string>
+    <string name="onboarding_rest_title">Default rest</string>
+    <string name="onboarding_rest_subtitle">Used when checking off a set if the exercise has no custom rest.</string>
+
+    <!-- Profile and About -->
+    <string name="profile_about_title">About</string>
+    <string name="profile_about_subtitle">Version, local privacy, and licenses</string>
+    <string name="about_title">About</string>
+    <string name="about_version_format">Version %1$s</string>
+    <string name="about_local_data_title">Your data stays local</string>
+    <string name="about_local_data_body">All your workouts, routines, measurements, and photos are stored only on this device. No accounts, no cloud, and no tracking.</string>
+    <string name="about_licenses_section">Library licenses</string>
+    <string name="about_license_apache2">Apache License 2.0</string>
+    <string name="about_license_ofl">SIL Open Font License 1.1</string>
+    <string name="about_lib_compose">Jetpack Compose &amp; Material 3</string>
+    <string name="about_lib_androidx">AndroidX Core, AppCompat, Lifecycle, Navigation, DataStore, Paging &amp; SplashScreen</string>
+    <string name="about_lib_room">AndroidX Room 3</string>
+    <string name="about_lib_hilt">Hilt &amp; Dagger</string>
+    <string name="about_lib_kotlinx">Kotlin Coroutines &amp; kotlinx.serialization</string>
+    <string name="about_lib_vico">Vico Compose</string>
+    <string name="about_lib_coil">Coil 3</string>
+    <string name="about_lib_barlow">Barlow &amp; Barlow Condensed fonts</string>
+
+    <!-- Common errors and states -->
+    <string name="error_generic_save">Couldn\'t save. Your data is still here; try again.</string>
+    <string name="error_generic_load">Couldn\'t load data. Try again.</string>
+    <string name="action_retry">Retry</string>
+    <string name="action_dismiss">Dismiss</string>
 </resources>

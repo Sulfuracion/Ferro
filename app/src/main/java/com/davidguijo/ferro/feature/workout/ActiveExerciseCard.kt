@@ -68,11 +68,11 @@ internal fun ActiveExerciseCard(
 ) {
     val colors = FerroTheme.colors
     val spacing = FerroTheme.spacing
-    val locale = if (isSpanish) Locale.forLanguageTag("es-ES") else Locale.US
+    val locale = remember(isSpanish) { if (isSpanish) Locale.forLanguageTag("es-ES") else Locale.US }
     val focusManager = LocalFocusManager.current
 
     val fieldCount = fieldCountForTrackingType(exercise.trackingType)
-    val setIds = exercise.sets.map { it.id }
+    val setIds = remember(exercise.sets) { exercise.sets.map { it.id } }
     val focusGrid =
         remember(setIds, fieldCount) {
             List(setIds.size) { List(fieldCount) { FocusRequester() } }

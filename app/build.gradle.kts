@@ -52,9 +52,11 @@ android {
         abortOnError = true
         warningsAsErrors = true
         checkDependencies = true
+        error += setOf("MissingTranslation", "HardcodedText")
         // Las versiones se revisan a mano contra la documentación oficial; estos avisos
         // dependen de la red y del día en que se ejecuta el build.
-        disable += setOf("GradleDependency", "NewerVersionAvailable", "AndroidGradlePluginVersion")
+        // ModifierParameter se desactiva por un NPE interno de Compose Lint en ProfileScreen.
+        disable += setOf("GradleDependency", "NewerVersionAvailable", "AndroidGradlePluginVersion", "ModifierParameter")
     }
 
     testOptions {

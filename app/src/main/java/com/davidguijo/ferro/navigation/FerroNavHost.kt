@@ -51,6 +51,10 @@ import com.davidguijo.ferro.feature.routines.RoutineEditorRoute
 import com.davidguijo.ferro.feature.routines.RoutineEditorScreen
 import com.davidguijo.ferro.feature.routines.RoutinesRoute
 import com.davidguijo.ferro.feature.routines.RoutinesScreen
+import com.davidguijo.ferro.feature.settings.AboutRoute
+import com.davidguijo.ferro.feature.settings.AboutScreen
+import com.davidguijo.ferro.feature.settings.OnboardingRoute
+import com.davidguijo.ferro.feature.settings.OnboardingScreen
 import com.davidguijo.ferro.feature.settings.ProfileRoute
 import com.davidguijo.ferro.feature.settings.ProfileScreen
 import com.davidguijo.ferro.feature.settings.SettingsRoute
@@ -81,6 +85,7 @@ private enum class TopLevelTab(
 @Composable
 fun FerroNavHost(
     modifier: Modifier = Modifier,
+    startWithOnboarding: Boolean = false,
     miniBarState: ActiveWorkoutMiniBarUiState? = null,
     openActiveWorkoutSignal: Int = 0
 ) {
@@ -92,6 +97,7 @@ fun FerroNavHost(
             currentDestination?.hasRoute(tab.routeClass) == true
         }
     val showActiveWorkoutMiniBar = showBottomBar && miniBarState != null
+    val startDestination: Any = if (startWithOnboarding) OnboardingRoute else TrainRoute
 
     LaunchedEffect(openActiveWorkoutSignal) {
         if (openActiveWorkoutSignal > 0 && currentDestination?.hasRoute(ActiveWorkoutRoute::class) != true) {
@@ -138,12 +144,22 @@ fun FerroNavHost(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = TrainRoute,
+            startDestination = startDestination,
             modifier =
                 Modifier
                     .padding(innerPadding)
                     .consumeWindowInsets(innerPadding)
         ) {
+            composable<OnboardingRoute> {
+                OnboardingScreen(
+                    onFinished = {
+                        navController.navigate(TrainRoute) {
+                            popUpTo<OnboardingRoute> { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    }
+                )
+            }
             composable<TrainRoute> {
                 TrainScreen(
                     onOpenActiveWorkout = {
@@ -179,7 +195,8 @@ fun FerroNavHost(
                     onOpenCalendar = { navController.navigate(CalendarRoute) },
                     onOpenBodyMeasurements = { navController.navigate(BodyMeasurementsRoute) },
                     onOpenBackup = { navController.navigate(BackupRoute) },
-                    onOpenSettings = { navController.navigate(SettingsRoute) }
+                    onOpenSettings = { navController.navigate(SettingsRoute) },
+                    onOpenAbout = { navController.navigate(AboutRoute) }
                 )
             }
             composable<ActiveWorkoutRoute> { backStackEntry ->
@@ -299,6 +316,11 @@ fun FerroNavHost(
             }
             composable<SettingsRoute> {
                 SettingsScreen(
+                    onBack = { navController.popBackStack() }
+                )
+            }
+            composable<AboutRoute> {
+                AboutScreen(
                     onBack = { navController.popBackStack() }
                 )
             }

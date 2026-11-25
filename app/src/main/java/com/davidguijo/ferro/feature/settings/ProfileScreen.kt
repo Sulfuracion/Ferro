@@ -1,9 +1,12 @@
 package com.davidguijo.ferro.feature.settings
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,12 +20,15 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.davidguijo.ferro.R
+import com.davidguijo.ferro.core.designsystem.component.FerroButton
+import com.davidguijo.ferro.core.designsystem.component.FerroButtonVariant
 import com.davidguijo.ferro.core.designsystem.component.FerroCard
 import com.davidguijo.ferro.core.designsystem.component.FerroDivider
 import com.davidguijo.ferro.core.designsystem.component.FerroListItem
@@ -42,18 +48,20 @@ fun ProfileScreen(
     onOpenBodyMeasurements: () -> Unit,
     onOpenBackup: () -> Unit,
     onOpenSettings: () -> Unit,
+    onOpenAbout: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
-    @Suppress("UNUSED_VARIABLE")
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     ProfileContent(
+        uiState = uiState,
         onOpenExerciseLibrary = onOpenExerciseLibrary,
         onOpenHistory = onOpenHistory,
         onOpenCalendar = onOpenCalendar,
         onOpenBodyMeasurements = onOpenBodyMeasurements,
         onOpenBackup = onOpenBackup,
         onOpenSettings = onOpenSettings,
+        onOpenAbout = onOpenAbout,
         modifier = modifier
     )
 }
@@ -67,7 +75,9 @@ internal fun ProfileContent(
     onOpenBodyMeasurements: () -> Unit,
     onOpenBackup: () -> Unit,
     onOpenSettings: () -> Unit,
-    modifier: Modifier = Modifier
+    onOpenAbout: () -> Unit,
+    modifier: Modifier = Modifier,
+    uiState: ProfileUiState = ProfileUiState()
 ) {
     val colors = FerroTheme.colors
     val spacing = FerroTheme.spacing
@@ -100,6 +110,14 @@ internal fun ProfileContent(
                     .verticalScroll(rememberScrollState())
                     .padding(horizontal = spacing.space4)
         ) {
+            if (uiState.showBackupReminder) {
+                BackupReminderBanner(
+                    daysSinceLastBackup = uiState.daysSinceLastBackup,
+                    onOpenBackup = onOpenBackup
+                )
+                Spacer(modifier = Modifier.height(spacing.space5))
+            }
+
             Text(
                 text = stringResource(R.string.profile_section_data).uppercase(),
                 style = FerroTheme.typography.label,
@@ -152,9 +170,54 @@ internal fun ProfileContent(
                     subtitle = stringResource(R.string.profile_settings_subtitle),
                     onClick = onOpenSettings
                 )
+                FerroDivider()
+                ProfileNavItem(
+                    title = stringResource(R.string.profile_about_title),
+                    subtitle = stringResource(R.string.profile_about_subtitle),
+                    onClick = onOpenAbout
+                )
             }
 
             Spacer(modifier = Modifier.height(spacing.space6))
+        }
+    }
+}
+
+@Composable
+private fun BackupReminderBanner(daysSinceLastBackup: Int?, onOpenBackup: () -> Unit) {
+    val colors = FerroTheme.colors
+    val spacing = FerroTheme.spacing
+    val message =
+        if (daysSinceLastBackup != null) {
+            stringResource(R.string.profile_backup_reminder_stale, daysSinceLastBackup)
+        } else {
+            stringResource(R.string.profile_backup_reminder_never)
+        }
+
+    FerroCard {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(spacing.space3)
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = stringResource(R.string.profile_backup_reminder_title),
+                    style = FerroTheme.typography.bodyStrong,
+                    color = colors.warning
+                )
+                Spacer(modifier = Modifier.height(spacing.space1))
+                Text(
+                    text = message,
+                    style = FerroTheme.typography.caption,
+                    color = colors.inkMuted
+                )
+            }
+            FerroButton(
+                text = stringResource(R.string.profile_backup_reminder_action),
+                onClick = onOpenBackup,
+                variant = FerroButtonVariant.Secondary
+            )
         }
     }
 }
@@ -181,12 +244,14 @@ private fun ProfileNavItem(title: String, subtitle: String, onClick: () -> Unit)
 private fun ProfileScreenPreview() {
     FerroTheme {
         ProfileContent(
+            uiState = ProfileUiState(showBackupReminder = true, daysSinceLastBackup = 42),
             onOpenExerciseLibrary = {},
             onOpenHistory = {},
             onOpenCalendar = {},
             onOpenBodyMeasurements = {},
             onOpenBackup = {},
-            onOpenSettings = {}
+            onOpenSettings = {},
+            onOpenAbout = {}
         )
     }
 }

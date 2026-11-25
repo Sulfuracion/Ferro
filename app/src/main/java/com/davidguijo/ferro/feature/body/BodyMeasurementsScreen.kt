@@ -67,6 +67,7 @@ import com.davidguijo.ferro.core.designsystem.component.FerroChip
 import com.davidguijo.ferro.core.designsystem.component.FerroDivider
 import com.davidguijo.ferro.core.designsystem.component.FerroIconButton
 import com.davidguijo.ferro.core.designsystem.component.FerroLineChart
+import com.davidguijo.ferro.core.designsystem.component.FerroLoadingState
 import com.davidguijo.ferro.core.designsystem.theme.FerroTheme
 import com.davidguijo.ferro.core.domain.BodyChartPoint
 import com.davidguijo.ferro.core.domain.BodyMeasurementCalculations
@@ -371,7 +372,14 @@ private fun BodySummaryTab(
             )
         }
 
-        if (uiState.isLoaded && uiState.measurements.isEmpty()) {
+        if (!uiState.isLoaded) {
+            item(key = "loading") {
+                FerroLoadingState(modifier = Modifier.height(240.dp))
+            }
+            return@LazyColumn
+        }
+
+        if (uiState.measurements.isEmpty()) {
             item {
                 FerroCard {
                     EmptyState(
@@ -616,7 +624,7 @@ private fun BodyChartsTab(
         verticalArrangement = Arrangement.spacedBy(spacing.space4)
     ) {
         LazyRow(horizontalArrangement = Arrangement.spacedBy(spacing.space2)) {
-            items(BodyMetric.entries) { metric ->
+            items(BodyMetric.entries, key = { it.name }) { metric ->
                 FerroChip(
                     label = stringResource(metric.labelRes()),
                     selected = metric == selectedMetric,
@@ -626,7 +634,7 @@ private fun BodyChartsTab(
         }
 
         LazyRow(horizontalArrangement = Arrangement.spacedBy(spacing.space2)) {
-            items(ProgressTimeRange.entries) { range ->
+            items(ProgressTimeRange.entries, key = { it.name }) { range ->
                 FerroChip(
                     label = stringResource(timeRangeLabelRes(range)),
                     selected = range == selectedRange,

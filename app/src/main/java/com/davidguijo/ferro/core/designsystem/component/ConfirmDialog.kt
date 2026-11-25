@@ -15,8 +15,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import com.davidguijo.ferro.R
+import com.davidguijo.ferro.core.designsystem.theme.FerroHaptics
 import com.davidguijo.ferro.core.designsystem.theme.FerroTheme
 
 /**
@@ -60,6 +63,8 @@ internal fun ConfirmDialogContent(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
+    val haptic = LocalHapticFeedback.current
+    val view = LocalView.current
     Surface(
         shape = RoundedCornerShape(FerroTheme.radius.lg),
         color = FerroTheme.colors.surface,
@@ -91,7 +96,12 @@ internal fun ConfirmDialogContent(
                 )
                 FerroButton(
                     text = confirmLabel,
-                    onClick = onConfirm,
+                    onClick = {
+                        if (destructive) {
+                            FerroHaptics.delete(view, haptic)
+                        }
+                        onConfirm()
+                    },
                     variant =
                         if (destructive) {
                             FerroButtonVariant.Danger

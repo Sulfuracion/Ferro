@@ -38,6 +38,7 @@ import com.davidguijo.ferro.core.designsystem.component.EmptyState
 import com.davidguijo.ferro.core.designsystem.component.FerroButton
 import com.davidguijo.ferro.core.designsystem.component.FerroButtonVariant
 import com.davidguijo.ferro.core.designsystem.component.FerroCard
+import com.davidguijo.ferro.core.designsystem.component.FerroErrorBanner
 import com.davidguijo.ferro.core.designsystem.component.FerroIconButton
 import com.davidguijo.ferro.core.designsystem.component.FerroPreviews
 import com.davidguijo.ferro.core.designsystem.theme.FerroTheme
@@ -72,6 +73,7 @@ fun TrainScreen(
         onResumeActiveWorkout = viewModel::onResumeActiveWorkout,
         onDiscardAndStartNew = viewModel::onDiscardAndStartPending,
         onDismissConflict = viewModel::onDismissConflictDialog,
+        onDismissError = viewModel::onDismissError,
         onOpenHistory = onOpenHistory,
         onOpenCalendar = onOpenCalendar,
         modifier = modifier
@@ -88,6 +90,7 @@ internal fun TrainContent(
     onDiscardAndStartNew: () -> Unit,
     onDismissConflict: () -> Unit,
     modifier: Modifier = Modifier,
+    onDismissError: () -> Unit = {},
     onOpenHistory: () -> Unit = {},
     onOpenCalendar: () -> Unit = {}
 ) {
@@ -135,6 +138,13 @@ internal fun TrainContent(
                     .padding(horizontal = spacing.space4)
         ) {
             Spacer(modifier = Modifier.height(spacing.space2))
+            if (uiState.hasError) {
+                FerroErrorBanner(
+                    message = stringResource(R.string.error_generic_load),
+                    onDismiss = onDismissError
+                )
+                Spacer(modifier = Modifier.height(spacing.space3))
+            }
             WeeklyStreakCard(
                 consecutiveWeeks = uiState.consecutiveWeeks,
                 workoutsThisWeek = uiState.workoutsThisWeek,

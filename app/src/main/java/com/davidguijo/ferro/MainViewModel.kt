@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -38,10 +39,22 @@ constructor(
         settingsRepository
             .observeSettings()
             .map { it.themeMode }
+            .catch { emit(ThemeMode.SYSTEM) }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
                 initialValue = ThemeMode.SYSTEM
+            )
+
+    val onboardingCompleted: StateFlow<Boolean?> =
+        settingsRepository
+            .observeOnboardingCompleted()
+            .map<Boolean, Boolean?> { it }
+            .catch { emit(true) }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = null
             )
 
     private val _openActiveWorkoutSignal = MutableStateFlow(0)

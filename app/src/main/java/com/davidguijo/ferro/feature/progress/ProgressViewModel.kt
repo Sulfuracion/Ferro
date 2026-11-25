@@ -18,6 +18,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -26,6 +27,7 @@ import kotlinx.coroutines.flow.stateIn
 
 data class ProgressUiState(
     val isLoaded: Boolean = false,
+    val hasError: Boolean = false,
     val weightUnit: WeightUnit = WeightUnit.KG,
     val summaryStats: ProgressSummaryStats =
         ProgressSummaryStats(
@@ -140,6 +142,8 @@ internal constructor(
                     muscleRecovery = recovery
                 )
             }
+        }.catch {
+            emit(ProgressUiState(isLoaded = true, hasError = true))
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),

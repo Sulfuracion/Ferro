@@ -25,7 +25,8 @@ data class Settings(
     val defaultRestSeconds: Int = DEFAULT_REST_SECONDS,
     val firstDayOfWeek: DayOfWeek = DayOfWeek.MONDAY,
     val timerSoundEnabled: Boolean = true,
-    val timerVibrationEnabled: Boolean = true
+    val timerVibrationEnabled: Boolean = true,
+    val lastBackupAtMillis: Long? = null
 ) {
     companion object {
         const val DEFAULT_REST_SECONDS = 90

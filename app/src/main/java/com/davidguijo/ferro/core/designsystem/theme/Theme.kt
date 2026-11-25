@@ -70,6 +70,7 @@ fun FerroTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable 
     val elevation = if (darkTheme) DarkFerroElevation else LightFerroElevation
 
     val view = LocalView.current
+    val reduceMotion = if (view.isInEditMode) false else rememberSystemReduceMotion()
     if (!view.isInEditMode) {
         SideEffect {
             val window = view.context.findActivity()?.window ?: return@SideEffect
@@ -86,7 +87,8 @@ fun FerroTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable 
         LocalFerroRadius provides FerroRadius(),
         LocalFerroSizes provides FerroSizes(),
         LocalFerroElevation provides elevation,
-        LocalFerroIsDark provides FerroThemeDarkFlag(darkTheme)
+        LocalFerroIsDark provides FerroThemeDarkFlag(darkTheme),
+        LocalFerroReduceMotion provides FerroReduceMotionFlag(reduceMotion)
     ) {
         MaterialTheme(
             colorScheme = colors.toMaterialColorScheme(isDark = darkTheme),
@@ -132,6 +134,11 @@ object FerroTheme {
         @Composable
         @ReadOnlyComposable
         get() = LocalFerroIsDark.current.isDark
+
+    val reduceMotion: Boolean
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalFerroReduceMotion.current.reduceMotion
 }
 
 private tailrec fun Context.findActivity(): Activity? = when (this) {

@@ -53,11 +53,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.view.HapticFeedbackConstantsCompat
-import androidx.core.view.ViewCompat
 import com.davidguijo.ferro.R
 import com.davidguijo.ferro.core.designsystem.component.NumberField
 import com.davidguijo.ferro.core.designsystem.component.SetTypeBadge
+import com.davidguijo.ferro.core.designsystem.theme.FerroHaptics
+import com.davidguijo.ferro.core.designsystem.theme.FerroMotion
 import com.davidguijo.ferro.core.designsystem.theme.FerroTheme
 import com.davidguijo.ferro.core.domain.WeightUnit
 import com.davidguijo.ferro.core.domain.model.TrackingType
@@ -253,7 +253,7 @@ internal fun ActiveSetRow(
     val rowBackground by
         animateColorAsState(
             targetValue = if (set.completed) colors.brasaSoft else Color.Transparent,
-            animationSpec = tween(durationMillis = CHECK_ANIM_MS),
+            animationSpec = FerroMotion.fastSpec(),
             label = "set_row_bg"
         )
 
@@ -269,6 +269,7 @@ internal fun ActiveSetRow(
         enableDismissFromEndToStart = true,
         onDismiss = { direction ->
             if (direction == SwipeToDismissBoxValue.EndToStart) {
+                FerroHaptics.delete(view, haptic)
                 onRemoveSet()
             }
         },
@@ -368,9 +369,9 @@ internal fun ActiveSetRow(
                         completed = set.completed,
                         onClick = {
                             if (!set.completed) {
-                                ViewCompat.performHapticFeedback(view, HapticFeedbackConstantsCompat.CONFIRM)
+                                FerroHaptics.confirm(view, haptic)
                             } else {
-                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                FerroHaptics.tick(haptic)
                             }
                             onToggleCompleted()
                         }
@@ -414,9 +415,9 @@ internal fun ActiveSetRow(
                             completed = set.completed,
                             onClick = {
                                 if (!set.completed) {
-                                    ViewCompat.performHapticFeedback(view, HapticFeedbackConstantsCompat.CONFIRM)
+                                    FerroHaptics.confirm(view, haptic)
                                 } else {
-                                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                    FerroHaptics.tick(haptic)
                                 }
                                 onToggleCompleted()
                             }
@@ -660,7 +661,7 @@ private fun SetDoneCheckbox(completed: Boolean, onClick: () -> Unit) {
     val boxColor by
         animateColorAsState(
             targetValue = if (completed) colors.brasa else colors.surfaceRaised,
-            animationSpec = tween(durationMillis = CHECK_ANIM_MS),
+            animationSpec = FerroMotion.fastSpec(),
             label = "set_done_box"
         )
     val label =
