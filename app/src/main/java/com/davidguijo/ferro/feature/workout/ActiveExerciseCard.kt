@@ -1,15 +1,11 @@
 package com.davidguijo.ferro.feature.workout
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,7 +20,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -78,174 +78,180 @@ internal fun ActiveExerciseCard(
             List(setIds.size) { List(fieldCount) { FocusRequester() } }
         }
 
+    val supersetColor = exercise.supersetGroup?.let { supersetAccentColor(it) }
+    val barWidth = spacing.space1
+    val barGap = spacing.space3
+    val barRadius = FerroTheme.radius.sm
+
     FerroCard(modifier = modifier) {
-        Row(
+        // drawBehind evita IntrinsicSize.Min, que crashea con BoxWithConstraints (SubcomposeLayout) en ActiveSetRow.
+        Column(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .height(IntrinsicSize.Min)
+                    .then(
+                        if (supersetColor != null) {
+                            Modifier
+                                .drawBehind {
+                                    val radiusPx = barRadius.toPx()
+                                    drawRoundRect(
+                                        color = supersetColor,
+                                        topLeft = Offset.Zero,
+                                        size = Size(barWidth.toPx(), size.height),
+                                        cornerRadius = CornerRadius(radiusPx, radiusPx)
+                                    )
+                                }
+                                .padding(start = barWidth + barGap)
+                        } else {
+                            Modifier
+                        }
+                    )
         ) {
             if (exercise.supersetGroup != null) {
-                Box(
+                Text(
+                    text =
+                        stringResource(
+                            R.string.routine_superset_badge_format,
+                            exercise.supersetGroup
+                        ).uppercase(),
+                    style = FerroTheme.typography.label,
+                    color = supersetAccentColor(exercise.supersetGroup)
+                )
+                Spacer(modifier = Modifier.height(spacing.space1))
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(
                     modifier =
                         Modifier
-                            .width(spacing.space1)
-                            .fillMaxHeight()
-                            .background(
-                                color = supersetAccentColor(exercise.supersetGroup),
-                                shape = RoundedCornerShape(FerroTheme.radius.sm)
-                            )
-                )
-                Spacer(modifier = Modifier.width(spacing.space3))
-            }
-
-            Column(modifier = Modifier.weight(1f)) {
-                if (exercise.supersetGroup != null) {
-                    Text(
-                        text =
-                            stringResource(
-                                R.string.routine_superset_badge_format,
-                                exercise.supersetGroup
-                            ).uppercase(),
-                        style = FerroTheme.typography.label,
-                        color = supersetAccentColor(exercise.supersetGroup)
-                    )
-                    Spacer(modifier = Modifier.height(spacing.space1))
-                }
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                            .weight(1f)
+                            .defaultMinSize(minHeight = FerroTheme.sizes.touchMin)
+                            .clip(RoundedCornerShape(FerroTheme.radius.sm))
+                            .clickable { onOpenExerciseDetail(exercise.exerciseId) }
+                            .padding(vertical = spacing.space1),
+                    verticalArrangement = Arrangement.Center
                 ) {
-                    Column(
-                        modifier =
-                            Modifier
-                                .weight(1f)
-                                .defaultMinSize(minHeight = FerroTheme.sizes.touchMin)
-                                .clip(RoundedCornerShape(FerroTheme.radius.sm))
-                                .clickable { onOpenExerciseDetail(exercise.exerciseId) }
-                                .padding(vertical = spacing.space1),
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = exercise.name,
-                            style = FerroTheme.typography.heading,
-                            color = colors.brasaText,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                        val restText =
-                            formatRestMinSec(
-                                resolveRestDurationSeconds(exercise.restSeconds, defaultRestSeconds)
-                            )
-                        val restSubtitle = stringResource(R.string.routine_preview_rest_format, restText)
-                        val subtitle =
-                            if (exercise.muscle != null) {
-                                "${stringResource(exercise.muscle.labelRes())} · $restSubtitle"
-                            } else {
-                                restSubtitle
-                            }
-                        Text(
-                            text = subtitle,
-                            style = FerroTheme.typography.caption,
-                            color = colors.inkMuted,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(spacing.space1))
-
-                    FerroChip(
-                        label = stringResource(R.string.active_exercise_rpe_toggle),
-                        selected = exercise.showRpeColumn,
-                        onClick = onToggleRpeColumn
+                    Text(
+                        text = exercise.name,
+                        style = FerroTheme.typography.heading,
+                        color = colors.brasaText,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
                     )
-
-                    FerroIconButton(
-                        painter = painterResource(R.drawable.ic_more_vert),
-                        contentDescription = stringResource(R.string.active_exercise_menu_cd, exercise.name),
-                        onClick = onOpenExerciseMenu,
-                        tint = colors.inkMuted,
-                        iconSize = FerroTheme.sizes.iconMd
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(spacing.space2))
-
-                OutlinedTextField(
-                    value = exercise.notes,
-                    onValueChange = onNotesChanged,
-                    modifier = Modifier.fillMaxWidth(),
-                    placeholder = {
-                        Text(
-                            text = stringResource(R.string.active_exercise_notes_placeholder),
-                            style = FerroTheme.typography.caption
+                    val restText =
+                        formatRestMinSec(
+                            resolveRestDurationSeconds(exercise.restSeconds, defaultRestSeconds)
                         )
-                    },
-                    textStyle = FerroTheme.typography.caption,
-                    maxLines = 3,
-                    shape = RoundedCornerShape(FerroTheme.radius.md),
-                    colors =
-                        OutlinedTextFieldDefaults.colors(
-                            focusedTextColor = colors.ink,
-                            unfocusedTextColor = colors.ink,
-                            focusedContainerColor = colors.surfaceRaised,
-                            unfocusedContainerColor = colors.surfaceRaised,
-                            focusedBorderColor = colors.focus,
-                            unfocusedBorderColor = colors.line,
-                            cursorColor = colors.focus,
-                            focusedPlaceholderColor = colors.inkSubtle,
-                            unfocusedPlaceholderColor = colors.inkSubtle
-                        )
-                )
-
-                Spacer(modifier = Modifier.height(spacing.space3))
-
-                ActiveSetsTableHeader(
-                    trackingType = exercise.trackingType,
-                    weightUnit = weightUnit,
-                    showRpeColumn = exercise.showRpeColumn
-                )
-
-                Spacer(modifier = Modifier.height(spacing.space1))
-
-                Column(verticalArrangement = Arrangement.spacedBy(spacing.space1)) {
-                    exercise.sets.forEachIndexed { setIndex, set ->
-                        val nextRowFirstRequester = focusGrid.getOrNull(setIndex + 1)?.firstOrNull()
-                        key(set.id) {
-                            ActiveSetRow(
-                                set = set,
-                                trackingType = exercise.trackingType,
-                                showRpeColumn = exercise.showRpeColumn,
-                                locale = locale,
-                                focusRequesters = focusGrid[setIndex],
-                                nextFocusRequester = nextRowFirstRequester,
-                                onDoneIme = { focusManager.clearFocus() },
-                                onBadgeClick = { onOpenSetTypePicker(set.id, set.setType) },
-                                onCopyPrevious = { onCopyPrevious(set.id) },
-                                onWeightChanged = { value -> onSetWeightChanged(set.id, value) },
-                                onRepsChanged = { value -> onSetRepsChanged(set.id, value) },
-                                onDurationChanged = { value -> onSetDurationChanged(set.id, value) },
-                                onDistanceChanged = { value -> onSetDistanceChanged(set.id, value) },
-                                onRpeClick = { onOpenRpePicker(set.id, set.rpeValue) },
-                                onToggleCompleted = { onToggleSetCompleted(set.id) },
-                                onRemoveSet = { onRemoveSet(set.id) }
-                            )
+                    val restSubtitle = stringResource(R.string.routine_preview_rest_format, restText)
+                    val subtitle =
+                        if (exercise.muscle != null) {
+                            "${stringResource(exercise.muscle.labelRes())} · $restSubtitle"
+                        } else {
+                            restSubtitle
                         }
-                    }
+                    Text(
+                        text = subtitle,
+                        style = FerroTheme.typography.caption,
+                        color = colors.inkMuted,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
 
-                Spacer(modifier = Modifier.height(spacing.space2))
+                Spacer(modifier = Modifier.width(spacing.space1))
 
-                FerroButton(
-                    text = stringResource(R.string.routine_editor_add_set),
-                    onClick = onAddSet,
-                    variant = FerroButtonVariant.Ghost,
-                    leadingIcon = painterResource(R.drawable.ic_add),
-                    modifier = Modifier.fillMaxWidth()
+                FerroChip(
+                    label = stringResource(R.string.active_exercise_rpe_toggle),
+                    selected = exercise.showRpeColumn,
+                    onClick = onToggleRpeColumn
+                )
+
+                FerroIconButton(
+                    painter = painterResource(R.drawable.ic_more_vert),
+                    contentDescription = stringResource(R.string.active_exercise_menu_cd, exercise.name),
+                    onClick = onOpenExerciseMenu,
+                    tint = colors.inkMuted,
+                    iconSize = FerroTheme.sizes.iconMd
                 )
             }
+
+            Spacer(modifier = Modifier.height(spacing.space2))
+
+            OutlinedTextField(
+                value = exercise.notes,
+                onValueChange = onNotesChanged,
+                modifier = Modifier.fillMaxWidth(),
+                placeholder = {
+                    Text(
+                        text = stringResource(R.string.active_exercise_notes_placeholder),
+                        style = FerroTheme.typography.caption
+                    )
+                },
+                textStyle = FerroTheme.typography.caption,
+                maxLines = 3,
+                shape = RoundedCornerShape(FerroTheme.radius.md),
+                colors =
+                    OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = colors.ink,
+                        unfocusedTextColor = colors.ink,
+                        focusedContainerColor = colors.surfaceRaised,
+                        unfocusedContainerColor = colors.surfaceRaised,
+                        focusedBorderColor = colors.focus,
+                        unfocusedBorderColor = colors.line,
+                        cursorColor = colors.focus,
+                        focusedPlaceholderColor = colors.inkSubtle,
+                        unfocusedPlaceholderColor = colors.inkSubtle
+                    )
+            )
+
+            Spacer(modifier = Modifier.height(spacing.space3))
+
+            ActiveSetsTableHeader(
+                trackingType = exercise.trackingType,
+                weightUnit = weightUnit,
+                showRpeColumn = exercise.showRpeColumn
+            )
+
+            Spacer(modifier = Modifier.height(spacing.space1))
+
+            Column(verticalArrangement = Arrangement.spacedBy(spacing.space1)) {
+                exercise.sets.forEachIndexed { setIndex, set ->
+                    val nextRowFirstRequester = focusGrid.getOrNull(setIndex + 1)?.firstOrNull()
+                    key(set.id) {
+                        ActiveSetRow(
+                            set = set,
+                            trackingType = exercise.trackingType,
+                            showRpeColumn = exercise.showRpeColumn,
+                            locale = locale,
+                            focusRequesters = focusGrid[setIndex],
+                            nextFocusRequester = nextRowFirstRequester,
+                            onDoneIme = { focusManager.clearFocus() },
+                            onBadgeClick = { onOpenSetTypePicker(set.id, set.setType) },
+                            onCopyPrevious = { onCopyPrevious(set.id) },
+                            onWeightChanged = { value -> onSetWeightChanged(set.id, value) },
+                            onRepsChanged = { value -> onSetRepsChanged(set.id, value) },
+                            onDurationChanged = { value -> onSetDurationChanged(set.id, value) },
+                            onDistanceChanged = { value -> onSetDistanceChanged(set.id, value) },
+                            onRpeClick = { onOpenRpePicker(set.id, set.rpeValue) },
+                            onToggleCompleted = { onToggleSetCompleted(set.id) },
+                            onRemoveSet = { onRemoveSet(set.id) }
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(spacing.space2))
+
+            FerroButton(
+                text = stringResource(R.string.routine_editor_add_set),
+                onClick = onAddSet,
+                variant = FerroButtonVariant.Ghost,
+                leadingIcon = painterResource(R.drawable.ic_add),
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }
